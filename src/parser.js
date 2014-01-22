@@ -1,4 +1,4 @@
-/**
+/*!
  * Kity Formula 公式表示法Parser接口
  */
 

@@ -1,4 +1,4 @@
-/**
+/*!
  * 方根函数处理器
  */
 
@@ -10,40 +10,54 @@ define( function ( require, exports, module ) {
         // 指数
         var exponent = null,
             // 被开方数
-            radicand = null;
+            radicand = null,
+            // 当前的解析器实例
+            parser = this,
+            tmp = null,
+            // 指数语法单元组
+            exponentUnits = [];
 
-        if ( unprocessedUnits.length ) {
+        if ( radicand = unprocessedUnits.shift() ) {
 
-            radicand = unprocessedUnits.shift();
+            // 抽取指数
+            if ( radicand === "[" ) {
 
-//            if ( typeof radicand === "string" && radicand.indexOf( "[" ) === "0" ) {
-//
-//                if ( /^\[([^\]]+)\]([\s\S]*)$/.test( radicand ) ) {
-//
-//                    radicand = RegExp.$1;
-//
-//                    if ( RegExp.$2.length ) {
-//                        unprocessedUnits.unshift( RegExp.$2 );
-//                    }
-//
-//                } else {
-//
-//                    throw new Error( "parse error: invalid '['" );
-//
-//                }
-//
-//            } else {
-//
-//
-//            }
+                while ( ( tmp = unprocessedUnits.shift() ) && tmp !== "]" ) {
 
+                    exponentUnits.push( tmp );
+
+                }
+
+                // 内部重新组合
+                if ( exponentUnits.length > 0 ) {
+                    exponent = parser.recombined( exponentUnits );
+                }
+
+                // 验证[和]是否匹配（成对出现）
+                if ( tmp !== ']' ) {
+                    throw new Error( "parse error: invalid '['" );
+                }
+
+                // 重新提取被开方数
+                if ( ( radicand = unprocessedUnits.shift() ) === undefined ) {
+                    missingError();
+                }
+
+            }
+
+        } else {
+            missingError();
         }
 
         return {
             operator: operatorName,
-            operand: [ numerator, denominator ]
+            operand: [ radicand, exponent ]
         };
 
     };
+
+    function missingError () {
+        throw new Error( 'parse error: "\\sqrt", missing radicand' );
+    }
 
 } );

@@ -5,6 +5,8 @@
     <script>
         window.kf = {};
     </script>
+    <script src="dev-lib/kitygraph.all.js"></script>
+    <script src="dev-lib/kity-formula.all.js"></script>
     <script src="dev-lib/sea-debug.js"></script>
     <script>
         seajs.config( {
@@ -13,8 +15,9 @@
 
         define( "start", function ( require, exports, module ) {
 
-            var Parser = require( "parser" ).Parser;
-
+            var Parser = require( "parser" ).Parser,
+                Assembly = require( "assembly" );
+                
             require( 'impl/latex/latex' );
 
             var latexParser = Parser.use( "latex" );
@@ -24,14 +27,17 @@
                 name: "latex2"
             } );
 
-            var result = latexParser.parse( "\\frac abcd" );
-//            var result = latexParser.parse( "\\frac{\\sqrt[3]a+b}{bcd}" );
+            var result = latexParser.parse( "fx={\\sqrt[2]{3}}" );
 
-            console.log( result )
+            Assembly.use( document.body ).generateBy( result );
 
         } );
 
-        seajs.use( 'start' );
+        window.onload = function () {
+
+            seajs.use( 'start' );
+
+        };
 
     </script>
     <script>

@@ -5,15 +5,15 @@
 define( function ( require, exports, module ) {
 
     var Parser = require( "parser" ).Parser,
-        FUN = require( "impl/latex/fun" );
+        FUN = require( "impl/latex/fun" ).operator,
+        // 操作符优先级
+        PRI = require( "impl/latex/fun" ).priority;
 
     Parser.register( "latex", Parser.implement( {
 
         parse: function ( data ) {
 
             var units = this.split( data );
-
-            units = this.analyze( units );
 
             units = this.restructuring( units );
 
@@ -29,7 +29,7 @@ define( function ( require, exports, module ) {
                 leftChar = "\ufeff",
                 rightChar = "\ufffc",
                 replacePattern = new RegExp( leftChar+"|"+rightChar, "g" ),
-                pattern = /(?:\\\w+)|(?:[{}])|(?:[^\\{}])/gi,
+                pattern = /(?:\\[a-z0-9]+)|(?:[{}])|(?:[^\\{}])/gi,
                 match = null;
 
             data = data.replace( /\s+/g, " " )
@@ -54,28 +54,6 @@ define( function ( require, exports, module ) {
             }
 
             return units;
-
-        },
-
-        analyze: function ( units ) {
-
-            var result = [];
-
-            for ( var i = 0, curUnit; curUnit = units[ i ]; i++ ) {
-
-                if ( this.isOperand( curUnit ) ) {
-
-                    result = result.concat( this.formatOperand( curUnit ) );
-
-                } else {
-
-                    result.push( curUnit );
-
-                }
-
-            }
-
-            return result;
 
         },
 
@@ -117,33 +95,6 @@ define( function ( require, exports, module ) {
 
         },
 
-        // 验证分割后的单元是否是操作数单元
-        isOperand: function ( str ) {
-
-            return /^[^\\{}]/.test( str );
-
-        },
-
-        /**
-         * 格式化操作数
-         * @param operandStr 操作数字符串
-         */
-        formatOperand: function ( operandStr ) {
-
-            var result = [],
-                match = null,
-                formatPattern = /(?:[_+\-\^])|(?:[^_+\-\^]+)/gi;
-
-            while ( match = formatPattern.exec( operandStr ) ) {
-
-                result.push( match[0] );
-
-            }
-
-            return result;
-
-        },
-
         /**
          * 根据解析出来的语法单元生成树
          * @param units 单元
@@ -153,7 +104,14 @@ define( function ( require, exports, module ) {
 
             var sequenceTree = generate( units );
 
-            return combinationTree( sequenceTree );
+            return combinationTree( this, sequenceTree );
+
+        },
+
+        // 重新组合语法单元， 但此时的语法单元有可能是经过解析过的对象集合
+        recombined: function ( units ) {
+
+            return recombinedTree( this, units );
 
         }
 
@@ -217,13 +175,11 @@ define( function ( require, exports, module ) {
      */
     function getFunctionName ( str ) {
 
-        if ( /[\\+\-_\^]/.test( str ) ) {
+        str = str.length > 1 ? str.replace( "\\", "" ) : str;
+        // 对应的函数对象
+        str = FUN[ str ];
 
-            return FUN[ str.replace( "\\", "" ) ].name;
-
-        }
-
-        return null;
+        return str ? str.name : null;
 
     }
 
@@ -231,54 +187,109 @@ define( function ( require, exports, module ) {
      * 把序列化存储的树结构进行整合， 生成最终的解析树
      * @param sequenceTree 序列化存储的树
      */
-    function combinationTree ( sequenceTree ) {
+    function combinationTree ( parser, sequenceTree ) {
 
         // 已处理过的结果集
         var processedResult = [],
-            currUnit = null,
-            text = null,
-            textResult = [],
-            handler = null;
-
+            struct = null,
+            textResult = null;
 
         // 递归到最深的叶子节点上
-        for ( var i = 0, struct, len = sequenceTree.length; i < len; i++ ) {
+        for ( var i = 0, len = sequenceTree.length; i < len; i++ ) {
 
             struct = sequenceTree[ i ];
 
             if ( isArray( struct ) ) {
 
-                sequenceTree[ i ] = combinationTree( struct );
+                sequenceTree[ i ] = combinationTree( parser, struct );
 
             }
 
         }
 
+        // 顺序组合序列存储的树里的语法单元
+        processedResult = processOperator( parser, sequenceTree );
+
+        // 合并文本单元
+        textResult = mergeText( processedResult );
+
+        // 返回组合了文本单元和其他单元的树对象
+        return mergeAllUnits( textResult );
+
+    }
+
+    /**
+     * 行为类似于combinationTree，但是不再进行递归处理
+     * @param units 需要重组的单元集合
+     */
+    function recombinedTree ( parser, units ) {
+
+        // 处理文本节点
+        units = mergeText( units );
+
+        units = processOperator( parser, units );
+
+        return mergeAllUnits( units );
+
+    }
+
+
+    /**
+     * 处理操作符， 使得语法单元中的操作数根据操作符的规则被组合在一起
+     * @return {Array} 返回已经处理过数据操作符后的语法单元数组
+     */
+    function processOperator ( parser, units ) {
+
+        var unit = null,
+            handler = null,
+        // 已处理过的结果集
+            processedResult = [];
 
         // 顺序组合序列存储的树里的语法单元
-        while ( currUnit = sequenceTree[ 0 ] ) {
+        while ( unit = units.shift() ) {
 
-            sequenceTree.shift();
+            if ( typeof unit === "string" ) {
 
-            if ( typeof currUnit === "string" ) {
-
-                processedResult.push( currUnit );
+                processedResult.push( unit );
 
             } else {
 
-                // 函数对应的处理器
-                handler = FUN[ currUnit.originOperator ].handler;
-                processedResult.push( handler( currUnit.operator, sequenceTree, processedResult ) );
+                // 已处理过的操作对象， 直接略过
+                if ( unit.operand && unit.operand.length > 0 ) {
+
+                    processedResult.push( unit );
+
+                    // 未处理过的语法单元
+                } else {
+
+                    // 函数对应的处理器
+                    handler = FUN[ unit.originOperator ].handler;
+                    processedResult.push( handler.call( parser, unit.operator, units, processedResult ) );
+
+                }
 
             }
 
         }
 
+        return processedResult;
+
+    }
+
+    /**
+     * 合并多个语法单元中连续的文本
+     */
+    function mergeText ( units ) {
+
+        var result = [],
+            text = null,
+            currUnit = null;
+
         // 合并连续的文本节点
-        for ( var i = 0, len = processedResult.length; i < len; i++ ) {
+        for ( var i = 0, len = units.length; i < len; i++ ) {
 
             // 当前处理的语法单元
-            currUnit = processedResult[ i ];
+            currUnit = units[ i ];
 
             if ( typeof currUnit === "string" ) {
 
@@ -291,11 +302,11 @@ define( function ( require, exports, module ) {
             } else {
 
                 if ( text !== null ) {
-                    textResult.push( text );
+                    result.push( text );
                     text = null;
                 }
 
-                textResult.push( currUnit );
+                result.push( currUnit );
 
             }
 
@@ -303,14 +314,21 @@ define( function ( require, exports, module ) {
 
         // 别忘了最后结尾的文本单元
         if ( text !== null ) {
-            textResult.push( text );
+            result.push( text );
         }
 
-        // 组合文本单元和其他单元
-        textResult.unshift( 'merge' );
-        processedResult = FUN[ 'merge' ].handler.apply( null, textResult );
+        return result;
 
-        return processedResult;
+    }
+
+    function mergeAllUnits ( units ) {
+
+        if ( units.length === 0 ) {
+            return null;
+        }
+
+        units.unshift( 'combination' );
+        return FUN[ 'combination' ].handler.apply( null, units );
 
     }
 
