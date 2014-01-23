@@ -36,7 +36,8 @@ define( function ( require, exports, module ) {
             },
             "=": {
                 name: "equal",
-                handler: binaryHandler
+                handler: binaryHandler,
+                pre: require( "impl/latex/pre/equal" )
             },
             "*": {
                 name: "asterisk",
@@ -64,6 +65,7 @@ define( function ( require, exports, module ) {
             },
             "sqrt": {
                 name: "radical",
+                pre: require( "impl/latex/pre/radical" ),
                 handler: require( "impl/latex/handler/radical" )
             },
             "sum": {

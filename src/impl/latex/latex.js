@@ -13,11 +13,31 @@ define( function ( require, exports, module ) {
 
         parse: function ( data ) {
 
-            var units = this.split( data );
+            var units = this.split( this.pretreatment( data ) );
 
             units = this.restructuring( units );
 
             return this.generateTree( units );
+
+        },
+
+        // 预处理表达式
+        pretreatment: function ( data ) {
+
+            var preFn = null;
+
+            // 调用各个操作符来进行预处理
+            for ( var op in FUN ) {
+
+                preFn = FUN[ op ].pre;
+
+                if ( preFn ) {
+                    data = preFn( data );
+                }
+
+            }
+
+            return data;
 
         },
 
@@ -262,9 +282,14 @@ define( function ( require, exports, module ) {
                     // 未处理过的语法单元
                 } else {
 
-                    // 函数对应的处理器
+                    // handler代表函数对应的处理器
                     handler = FUN[ unit.originOperator ].handler;
-                    processedResult.push( handler.call( parser, unit.operator, units, processedResult ) );
+                    // handler代表处理过后的结果集
+                    handler = handler.call( parser, unit.operator, units, processedResult );
+                    // 验证操作符处理后的结果， 如果验证失败， 会抛出异常
+                    validOperatorResult( handler, parser );
+                    debugger;
+                    processedResult.push( handler );
 
                 }
 
@@ -329,6 +354,34 @@ define( function ( require, exports, module ) {
 
         units.unshift( 'combination' );
         return FUN[ 'combination' ].handler.apply( null, units );
+
+    }
+
+    function validOperatorResult ( result, parser ) {
+
+        var operands = result.operand,
+            curOperand = null;
+
+        for ( var i = 0, len = operands.length; i < len; i++ ) {
+
+            curOperand = operands[ i ];
+
+            if ( curOperand && typeof curOperand === 'object' ) {
+
+                // 操作符对象还未被处理过
+                if ( curOperand.hasOwnProperty( "originOperator" ) ) {
+
+                    if ( curOperand.empty === false ) {
+                        throw new Error( "operator error: " + curOperand.operator + " Untreated" );
+                    } else {
+                        operands[ i ] = FUN[ curOperand.originOperator ].handler.call( parser, curOperand.operator, [], [] );
+                    }
+
+                }
+
+            }
+
+        }
 
     }
 

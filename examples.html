@@ -21,13 +21,13 @@
             require( 'impl/latex/latex' );
 
             var latexParser = Parser.use( "latex" );
-            Parser.config( "name", "latex" );
-            Parser.config( {
-                sex: "nan2",
-                name: "latex2"
-            } );
+//            Parser.config( "name", "latex" );
+//            Parser.config( {
+//                sex: "nan2",
+//                name: "latex2"
+//            } );
 
-            var result = latexParser.parse( "fx={\\sqrt[2]{3}}" );
+            var result = latexParser.parse( "fx=\\sqrt[+]b" );
 
             Assembly.use( document.body ).generateBy( result );
 
