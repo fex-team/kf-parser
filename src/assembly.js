@@ -22,6 +22,13 @@ define( function ( require, exports, module ) {
 
     };
 
+    Assembly.prototype.regenerateBy = function ( data ) {
+
+        this.formula.clear();
+        return this.generateBy( data );
+
+    };
+
     /**
      * 根据提供的树信息生成表达式
      * @param tree 中间格式的解析树
@@ -32,7 +39,8 @@ define( function ( require, exports, module ) {
         var currentOperand = null,
             exp = null,
             operand = tree.operand,
-            construct = null;
+            constructor = null,
+            constructorProxy;
 
         // 处理操作数
         for ( var i = 0, len = operand.length; i < len; i++ ) {
@@ -47,14 +55,27 @@ define( function ( require, exports, module ) {
 
         }
 
-        construct = getConstructor( tree.operator );
+        constructor = getConstructor( tree.operator );
 
-        if ( !construct ) {
+        if ( !constructor ) {
             throw new Error( 'operator type error: not found ' + tree.operator );
         }
 
-        exp = new construct();
-        construct.apply( exp, operand );
+        constructorProxy = function () {};
+        constructorProxy.prototype = constructor.prototype;
+        exp = new constructorProxy();
+        constructor.apply( exp, operand );
+
+        // 调用配置函数
+        for ( var fn in tree.callFn ) {
+
+            if ( !tree.callFn.hasOwnProperty( fn ) || !exp[ fn ] ) {
+                continue;
+            }
+
+            exp[ fn ].apply( exp, tree.callFn[ fn ] );
+
+        }
 
         return exp;
 

@@ -2,9 +2,6 @@
 <html>
 <head>
     <title></title>
-    <script>
-        window.kf = {};
-    </script>
     <script src="dev-lib/kitygraph.all.js"></script>
     <script src="dev-lib/kity-formula.all.js"></script>
     <script src="dev-lib/sea-debug.js"></script>
@@ -27,7 +24,7 @@
 //                name: "latex2"
 //            } );
 
-            var result = latexParser.parse( "fx=\\sqrt[+]b" );
+            var result = latexParser.parse( "f(x)=\\sum_{a-b}{\\frac ab}" );
 
             Assembly.use( document.body ).generateBy( result );
 

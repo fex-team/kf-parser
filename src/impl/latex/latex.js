@@ -5,9 +5,11 @@
 define( function ( require, exports, module ) {
 
     var Parser = require( "parser" ).Parser,
-        FUN = require( "impl/latex/fun" ).operator,
-        // 操作符优先级
-        PRI = require( "impl/latex/fun" ).priority;
+        FUN = require( "impl/latex/fun" ).operator;
+
+    // data
+    var leftChar = "\ufeff",
+        rightChar = "\ufffc";
 
     Parser.register( "latex", Parser.implement( {
 
@@ -46,8 +48,6 @@ define( function ( require, exports, module ) {
             var units = [],
                 leftPattern = /\\{/g,
                 rightPattern = /\\}/g,
-                leftChar = "\ufeff",
-                rightChar = "\ufffc",
                 replacePattern = new RegExp( leftChar+"|"+rightChar, "g" ),
                 pattern = /(?:\\[a-z0-9]+)|(?:[{}])|(?:[^\\{}])/gi,
                 match = null;
@@ -59,15 +59,11 @@ define( function ( require, exports, module ) {
 
             while ( match = pattern.exec( data ) ) {
 
-                match = match[ 0 ].replace( /\s+/g, "" );
+                match = match[ 0 ];
 
                 if ( match ) {
 
-                    units.push( match.replace( replacePattern, function ( char ) {
-
-                        return char === leftChar ? "{" : "}";
-
-                    } ) );
+                    units.push( match );
 
                 }
 
@@ -87,7 +83,8 @@ define( function ( require, exports, module ) {
             var root = [],
                 // group 栈
                 stack = [ root ],
-                curGroup = stack[ 0 ];
+                curGroup = stack[ 0 ],
+                replacePattern = new RegExp( leftChar+"|"+rightChar, "g" );
 
             for ( var i = 0, currentUnit, len = units.length; i < len; i++ ) {
 
@@ -105,7 +102,11 @@ define( function ( require, exports, module ) {
                         break;
 
                     default:
-                        curGroup.push( currentUnit );
+                        curGroup.push( currentUnit.replace( replacePattern, function ( char ) {
+
+                            return char === leftChar ? "{" : "}";
+
+                        } ).replace( /\s+/g, "" ) );
 
                 }
 
@@ -288,7 +289,6 @@ define( function ( require, exports, module ) {
                     handler = handler.call( parser, unit.operator, units, processedResult );
                     // 验证操作符处理后的结果， 如果验证失败， 会抛出异常
                     validOperatorResult( handler, parser );
-                    debugger;
                     processedResult.push( handler );
 
                 }
@@ -317,6 +317,8 @@ define( function ( require, exports, module ) {
             currUnit = units[ i ];
 
             if ( typeof currUnit === "string" ) {
+
+                currUnit = transformSpecialCharacters( currUnit );
 
                 if ( text === null ) {
                     text = currUnit;
@@ -374,6 +376,7 @@ define( function ( require, exports, module ) {
                     if ( curOperand.empty === false ) {
                         throw new Error( "operator error: " + curOperand.operator + " Untreated" );
                     } else {
+                        // 处理操作符
                         operands[ i ] = FUN[ curOperand.originOperator ].handler.call( parser, curOperand.operator, [], [] );
                     }
 
@@ -388,6 +391,16 @@ define( function ( require, exports, module ) {
     function isArray ( obj ) {
 
         return Object.prototype.toString.call( obj ) === '[object Array]';
+
+    }
+
+    function transformSpecialCharacters ( char ) {
+
+        if ( char.indexOf( "\\" ) === 0 ) {
+            return char + "\\";
+        }
+
+        return char;
 
     }
 

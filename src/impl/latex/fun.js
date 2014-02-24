@@ -7,7 +7,6 @@ define( function ( require, exports, module ) {
     var binaryHandler = require( "impl/latex/handler/binary" );
 
     return {
-        priority: [],
         operator: {
 
             "combination": {
@@ -35,9 +34,8 @@ define( function ( require, exports, module ) {
                 handler: binaryHandler
             },
             "=": {
-                name: "equal",
-                handler: binaryHandler,
-                pre: require( "impl/latex/pre/equal" )
+                name: "eq",
+                handler: binaryHandler
             },
             "*": {
                 name: "asterisk",
@@ -70,11 +68,13 @@ define( function ( require, exports, module ) {
             },
             "sum": {
                 name: "summation",
+                pre: require( "impl/latex/pre/summation" ),
                 handler: require( "impl/latex/handler/summation" )
             },
             "int": {
                 name: "integration",
-                handler: require( "impl/latex/handler/summation" )
+                pre: require( "impl/latex/pre/integration" ),
+                handler: require( "impl/latex/handler/integration" )
             }
 
         }
