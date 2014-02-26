@@ -11,7 +11,7 @@ define( function ( require, exports, module ) {
      */
     return function ( data ) {
 
-        var pattern = /\\(i+nt)\s*([_^](?:(?:{[^}]*})|[\s\S]))?([_^](?:(?:{[^}]*})|[\s\S]))?((?:{[^}]*})|[\s\S])/gi;
+        var pattern = /\\(i+nt)\b\s*([_^](?:(?:{[^}]*})|[\s\S]))?([_^](?:(?:{[^}]*})|[\s\S]))?((?:{[^}]*})|[\s\S])/gi;
 
         return data.replace( pattern, function () {
 
@@ -32,15 +32,18 @@ define( function ( require, exports, module ) {
 
             } else {
 
-                scripts[ 0 ] = scripts[ 0 ].substring( 1 ).replace( /^{|}$/g, "" );
-                scripts[ 1 ] = ( scripts[ 1 ] || "" ).substring( 1 ).replace( /^{|}$/g, "" );
+                if ( scripts[ 0 ].indexOf( "^" ) === 0 ) {
 
-                if ( scripts[ 0 ].indexOf( "^" ) !== 0 ) {
+                    scripts[ 0 ] = scripts[ 0 ].substring( 1 ).replace( /^{|}$/g, "" );
+                    scripts[ 1 ] = ( scripts[ 1 ] || "" ).substring( 1 ).replace( /^{|}$/g, "" );
 
                     superscript = '{'+ scripts[ 0 ] +'}';
                     subscript = '{' + scripts[ 1 ]+ '}';
 
                 } else {
+
+                    scripts[ 0 ] = scripts[ 0 ].substring( 1 ).replace( /^{|}$/g, "" );
+                    scripts[ 1 ] = ( scripts[ 1 ] || "" ).substring( 1 ).replace( /^{|}$/g, "" );
 
                     subscript = '{'+ scripts[ 0 ] +'}';
                     superscript = '{' + scripts[ 1 ]+ '}';

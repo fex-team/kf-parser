@@ -11,7 +11,7 @@ define( function ( require, exports, module ) {
      */
     return function ( data ) {
 
-        var pattern = /\\sum\s*([_^](?:(?:{[^}]*})|[\s\S]))?([_^](?:(?:{[^}]*})|[\s\S]))?((?:{[^}]*})|[\s\S])/gi;
+        var pattern = /\\sum\b\s*([_^](?:(?:{[^}]*})|[\s\S]))?([_^](?:(?:{[^}]*})|[\s\S]))?((?:{[^}]*})|[\s\S])/gi;
 
         return data.replace( pattern, function () {
 

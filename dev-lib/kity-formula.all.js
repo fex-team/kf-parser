@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * Kity Formula - v1.0.0 - 2014-02-24
+ * Kity Formula - v1.0.0 - 2014-02-25
  * https://github.com/kitygraph/formula
  * GitHub: https://github.com/kitygraph/formula.git 
  * Copyright (c) 2014 Baidu Kity Group; Licensed MIT
@@ -88,7 +88,7 @@ function use ( id ) {
 /**
  * 字符类
  */
-define("char/char", [ "kity", "char/data", "char/data/number/0", "char/data/number/1", "char/data/number/2", "char/data/number/3", "char/data/number/4", "char/data/number/5", "char/data/number/6", "char/data/number/7", "char/data/number/8", "char/data/number/9", "char/data/character/a", "char/data/character/b", "char/data/character/c", "char/data/character/d", "char/data/character/e", "char/data/character/f", "char/data/character/g", "char/data/character/h", "char/data/character/i", "char/data/character/j", "char/data/character/k", "char/data/character/l", "char/data/character/m", "char/data/character/n", "char/data/character/o", "char/data/character/p", "char/data/character/q", "char/data/character/r", "char/data/character/s", "char/data/character/t", "char/data/character/u", "char/data/character/v", "char/data/character/w", "char/data/character/x", "char/data/character/y", "char/data/character/z", "char/data/character/ua", "char/data/character/ub", "char/data/character/uc", "char/data/character/ud", "char/data/character/ue", "char/data/character/uf", "char/data/character/ug", "char/data/character/uh", "char/data/character/ui", "char/data/character/uj", "char/data/character/uk", "char/data/character/ul", "char/data/character/um", "char/data/character/un", "char/data/character/uo", "char/data/character/up", "char/data/character/uq", "char/data/character/ur", "char/data/character/us", "char/data/character/ut", "char/data/character/uu", "char/data/character/uv", "char/data/character/uw", "char/data/character/ux", "char/data/character/uy", "char/data/character/uz", "char/data/symbol/l-parentheses", "char/data/symbol/r-parentheses", "char/data/symbol/negative", "char/data/symbol/positive", "char/data/symbol/vertical", "char/data/symbol/slash", "char/data/symbol/exclamation", "char/data/symbol/l-brackets", "char/data/symbol/r-brackets", "char/data/symbol/colon", "char/data/symbol/quotation", "char/data/symbol/lt", "char/data/symbol/gt", "char/data/symbol/point", "char/data/symbol/l-braces", "char/data/symbol/r-braces", "char/data/greek/alpha", "char/data/greek/beta", "char/data/greek/gamma", "char/data/greek/delta", "char/data/greek/epsilon", "char/data/greek/zeta", "char/data/greek/eta", "char/data/greek/theta", "char/data/greek/iota", "char/data/greek/kappa", "char/data/greek/lambda", "char/data/greek/mu", "char/data/greek/nu", "char/data/greek/xi", "char/data/greek/pi", "char/data/greek/rho", "char/data/greek/sigma", "char/data/greek/tau", "char/data/greek/upsilon", "char/data/greek/phi", "char/data/greek/chi", "char/data/greek/psi", "char/data/greek/omega", "char/data/roman/ua", "char/data/roman/ub", "char/data/greek/u-gamma", "char/data/greek/u-delta", "char/data/roman/ue", "char/data/roman/uz", "char/data/roman/uh", "char/data/greek/u-theta", "char/data/roman/ui", "char/data/roman/uk", "char/data/greek/u-lambda", "char/data/roman/um", "char/data/roman/un", "char/data/greek/u-xi", "char/data/roman/uo", "char/data/greek/u-pi", "char/data/roman/up", "char/data/greek/u-sigma", "char/data/roman/ut", "char/data/greek/u-upsilon", "char/data/greek/u-phi", "char/data/roman/ux", "char/data/greek/u-psi", "char/data/greek/u-omega", "char/data/roman/a", "char/data/roman/b", "char/data/roman/c", "char/data/roman/d", "char/data/roman/e", "char/data/roman/f", "char/data/roman/g", "char/data/roman/h", "char/data/roman/i", "char/data/roman/j", "char/data/roman/k", "char/data/roman/l", "char/data/roman/m", "char/data/roman/n", "char/data/roman/o", "char/data/roman/p", "char/data/roman/q", "char/data/roman/r", "char/data/roman/s", "char/data/roman/t", "char/data/roman/u", "char/data/roman/v", "char/data/roman/w", "char/data/roman/x", "char/data/roman/y", "char/data/roman/z", "char/data/roman/uc", "char/data/roman/ud", "char/data/roman/uf", "char/data/roman/ug", "char/data/roman/uj", "char/data/roman/ul", "char/data/roman/uq", "char/data/roman/ur", "char/data/roman/us", "char/data/roman/uu", "char/data/roman/uv", "char/data/roman/uw", "char/data/roman/uy", "signgroup" ], function(require, exports, module) {
+define("char/char", [ "kity", "char/data", "char/data/number/0", "char/data/number/1", "char/data/number/2", "char/data/number/3", "char/data/number/4", "char/data/number/5", "char/data/number/6", "char/data/number/7", "char/data/number/8", "char/data/number/9", "char/data/character/a", "char/data/character/b", "char/data/character/c", "char/data/character/d", "char/data/character/e", "char/data/character/f", "char/data/character/g", "char/data/character/h", "char/data/character/i", "char/data/character/j", "char/data/character/k", "char/data/character/l", "char/data/character/m", "char/data/character/n", "char/data/character/o", "char/data/character/p", "char/data/character/q", "char/data/character/r", "char/data/character/s", "char/data/character/t", "char/data/character/u", "char/data/character/v", "char/data/character/w", "char/data/character/x", "char/data/character/y", "char/data/character/z", "char/data/character/ua", "char/data/character/ub", "char/data/character/uc", "char/data/character/ud", "char/data/character/ue", "char/data/character/uf", "char/data/character/ug", "char/data/character/uh", "char/data/character/ui", "char/data/character/uj", "char/data/character/uk", "char/data/character/ul", "char/data/character/um", "char/data/character/un", "char/data/character/uo", "char/data/character/up", "char/data/character/uq", "char/data/character/ur", "char/data/character/us", "char/data/character/ut", "char/data/character/uu", "char/data/character/uv", "char/data/character/uw", "char/data/character/ux", "char/data/character/uy", "char/data/character/uz", "char/data/symbol/l-parentheses", "char/data/symbol/r-parentheses", "char/data/symbol/negative", "char/data/symbol/positive", "char/data/symbol/vertical", "char/data/symbol/slash", "char/data/symbol/exclamation", "char/data/symbol/l-brackets", "char/data/symbol/r-brackets", "char/data/symbol/colon", "char/data/symbol/quotation", "char/data/symbol/lt", "char/data/symbol/gt", "char/data/symbol/point", "char/data/symbol/l-braces", "char/data/symbol/r-braces", "char/data/symbol/infty", "char/data/symbol/to", "char/data/greek/alpha", "char/data/greek/beta", "char/data/greek/gamma", "char/data/greek/delta", "char/data/greek/epsilon", "char/data/greek/zeta", "char/data/greek/eta", "char/data/greek/theta", "char/data/greek/iota", "char/data/greek/kappa", "char/data/greek/lambda", "char/data/greek/mu", "char/data/greek/nu", "char/data/greek/xi", "char/data/greek/pi", "char/data/greek/rho", "char/data/greek/sigma", "char/data/greek/tau", "char/data/greek/upsilon", "char/data/greek/phi", "char/data/greek/chi", "char/data/greek/psi", "char/data/greek/omega", "char/data/roman/ua", "char/data/roman/ub", "char/data/greek/u-gamma", "char/data/greek/u-delta", "char/data/roman/ue", "char/data/roman/uz", "char/data/roman/uh", "char/data/greek/u-theta", "char/data/roman/ui", "char/data/roman/uk", "char/data/greek/u-lambda", "char/data/roman/um", "char/data/roman/un", "char/data/greek/u-xi", "char/data/roman/uo", "char/data/greek/u-pi", "char/data/roman/up", "char/data/greek/u-sigma", "char/data/roman/ut", "char/data/greek/u-upsilon", "char/data/greek/u-phi", "char/data/roman/ux", "char/data/greek/u-psi", "char/data/greek/u-omega", "char/data/roman/a", "char/data/roman/b", "char/data/roman/c", "char/data/roman/d", "char/data/roman/e", "char/data/roman/f", "char/data/roman/g", "char/data/roman/h", "char/data/roman/i", "char/data/roman/j", "char/data/roman/k", "char/data/roman/l", "char/data/roman/m", "char/data/roman/n", "char/data/roman/o", "char/data/roman/p", "char/data/roman/q", "char/data/roman/r", "char/data/roman/s", "char/data/roman/t", "char/data/roman/u", "char/data/roman/v", "char/data/roman/w", "char/data/roman/x", "char/data/roman/y", "char/data/roman/z", "char/data/roman/uc", "char/data/roman/ud", "char/data/roman/uf", "char/data/roman/ug", "char/data/roman/uj", "char/data/roman/ul", "char/data/roman/uq", "char/data/roman/ur", "char/data/roman/us", "char/data/roman/uu", "char/data/roman/uv", "char/data/roman/uw", "char/data/roman/uy", "signgroup" ], function(require, exports, module) {
     var kity = require("kity"), CHAR_DATA = require("char/data");
     return kity.createClass("Char", {
         base: require("signgroup"),
@@ -127,7 +127,7 @@ define("char/char", [ "kity", "char/data", "char/data/number/0", "char/data/numb
 /**
  * 字符与pathdata映射
  */
-define("char/data", [ "char/data/number/0", "char/data/number/1", "char/data/number/2", "char/data/number/3", "char/data/number/4", "char/data/number/5", "char/data/number/6", "char/data/number/7", "char/data/number/8", "char/data/number/9", "char/data/character/a", "char/data/character/b", "char/data/character/c", "char/data/character/d", "char/data/character/e", "char/data/character/f", "char/data/character/g", "char/data/character/h", "char/data/character/i", "char/data/character/j", "char/data/character/k", "char/data/character/l", "char/data/character/m", "char/data/character/n", "char/data/character/o", "char/data/character/p", "char/data/character/q", "char/data/character/r", "char/data/character/s", "char/data/character/t", "char/data/character/u", "char/data/character/v", "char/data/character/w", "char/data/character/x", "char/data/character/y", "char/data/character/z", "char/data/character/ua", "char/data/character/ub", "char/data/character/uc", "char/data/character/ud", "char/data/character/ue", "char/data/character/uf", "char/data/character/ug", "char/data/character/uh", "char/data/character/ui", "char/data/character/uj", "char/data/character/uk", "char/data/character/ul", "char/data/character/um", "char/data/character/un", "char/data/character/uo", "char/data/character/up", "char/data/character/uq", "char/data/character/ur", "char/data/character/us", "char/data/character/ut", "char/data/character/uu", "char/data/character/uv", "char/data/character/uw", "char/data/character/ux", "char/data/character/uy", "char/data/character/uz", "char/data/symbol/l-parentheses", "char/data/symbol/r-parentheses", "char/data/symbol/negative", "char/data/symbol/positive", "char/data/symbol/vertical", "char/data/symbol/slash", "char/data/symbol/exclamation", "char/data/symbol/l-brackets", "char/data/symbol/r-brackets", "char/data/symbol/colon", "char/data/symbol/quotation", "char/data/symbol/lt", "char/data/symbol/gt", "char/data/symbol/point", "char/data/symbol/l-braces", "char/data/symbol/r-braces", "char/data/greek/alpha", "char/data/greek/beta", "char/data/greek/gamma", "char/data/greek/delta", "char/data/greek/epsilon", "char/data/greek/zeta", "char/data/greek/eta", "char/data/greek/theta", "char/data/greek/iota", "char/data/greek/kappa", "char/data/greek/lambda", "char/data/greek/mu", "char/data/greek/nu", "char/data/greek/xi", "char/data/greek/pi", "char/data/greek/rho", "char/data/greek/sigma", "char/data/greek/tau", "char/data/greek/upsilon", "char/data/greek/phi", "char/data/greek/chi", "char/data/greek/psi", "char/data/greek/omega", "char/data/roman/ua", "char/data/roman/ub", "char/data/greek/u-gamma", "char/data/greek/u-delta", "char/data/roman/ue", "char/data/roman/uz", "char/data/roman/uh", "char/data/greek/u-theta", "char/data/roman/ui", "char/data/roman/uk", "char/data/greek/u-lambda", "char/data/roman/um", "char/data/roman/un", "char/data/greek/u-xi", "char/data/roman/uo", "char/data/greek/u-pi", "char/data/roman/up", "char/data/greek/u-sigma", "char/data/roman/ut", "char/data/greek/u-upsilon", "char/data/greek/u-phi", "char/data/roman/ux", "char/data/greek/u-psi", "char/data/greek/u-omega", "char/data/roman/a", "char/data/roman/b", "char/data/roman/c", "char/data/roman/d", "char/data/roman/e", "char/data/roman/f", "char/data/roman/g", "char/data/roman/h", "char/data/roman/i", "char/data/roman/j", "char/data/roman/k", "char/data/roman/l", "char/data/roman/m", "char/data/roman/n", "char/data/roman/o", "char/data/roman/p", "char/data/roman/q", "char/data/roman/r", "char/data/roman/s", "char/data/roman/t", "char/data/roman/u", "char/data/roman/v", "char/data/roman/w", "char/data/roman/x", "char/data/roman/y", "char/data/roman/z", "char/data/roman/uc", "char/data/roman/ud", "char/data/roman/uf", "char/data/roman/ug", "char/data/roman/uj", "char/data/roman/ul", "char/data/roman/uq", "char/data/roman/ur", "char/data/roman/us", "char/data/roman/uu", "char/data/roman/uv", "char/data/roman/uw", "char/data/roman/uy" ], function(require, exports, module) {
+define("char/data", [ "char/data/number/0", "char/data/number/1", "char/data/number/2", "char/data/number/3", "char/data/number/4", "char/data/number/5", "char/data/number/6", "char/data/number/7", "char/data/number/8", "char/data/number/9", "char/data/character/a", "char/data/character/b", "char/data/character/c", "char/data/character/d", "char/data/character/e", "char/data/character/f", "char/data/character/g", "char/data/character/h", "char/data/character/i", "char/data/character/j", "char/data/character/k", "char/data/character/l", "char/data/character/m", "char/data/character/n", "char/data/character/o", "char/data/character/p", "char/data/character/q", "char/data/character/r", "char/data/character/s", "char/data/character/t", "char/data/character/u", "char/data/character/v", "char/data/character/w", "char/data/character/x", "char/data/character/y", "char/data/character/z", "char/data/character/ua", "char/data/character/ub", "char/data/character/uc", "char/data/character/ud", "char/data/character/ue", "char/data/character/uf", "char/data/character/ug", "char/data/character/uh", "char/data/character/ui", "char/data/character/uj", "char/data/character/uk", "char/data/character/ul", "char/data/character/um", "char/data/character/un", "char/data/character/uo", "char/data/character/up", "char/data/character/uq", "char/data/character/ur", "char/data/character/us", "char/data/character/ut", "char/data/character/uu", "char/data/character/uv", "char/data/character/uw", "char/data/character/ux", "char/data/character/uy", "char/data/character/uz", "char/data/symbol/l-parentheses", "char/data/symbol/r-parentheses", "char/data/symbol/negative", "char/data/symbol/positive", "char/data/symbol/vertical", "char/data/symbol/slash", "char/data/symbol/exclamation", "char/data/symbol/l-brackets", "char/data/symbol/r-brackets", "char/data/symbol/colon", "char/data/symbol/quotation", "char/data/symbol/lt", "char/data/symbol/gt", "char/data/symbol/point", "char/data/symbol/l-braces", "char/data/symbol/r-braces", "char/data/symbol/infty", "char/data/symbol/to", "char/data/greek/alpha", "char/data/greek/beta", "char/data/greek/gamma", "char/data/greek/delta", "char/data/greek/epsilon", "char/data/greek/zeta", "char/data/greek/eta", "char/data/greek/theta", "char/data/greek/iota", "char/data/greek/kappa", "char/data/greek/lambda", "char/data/greek/mu", "char/data/greek/nu", "char/data/greek/xi", "char/data/greek/pi", "char/data/greek/rho", "char/data/greek/sigma", "char/data/greek/tau", "char/data/greek/upsilon", "char/data/greek/phi", "char/data/greek/chi", "char/data/greek/psi", "char/data/greek/omega", "char/data/roman/ua", "char/data/roman/ub", "char/data/greek/u-gamma", "char/data/greek/u-delta", "char/data/roman/ue", "char/data/roman/uz", "char/data/roman/uh", "char/data/greek/u-theta", "char/data/roman/ui", "char/data/roman/uk", "char/data/greek/u-lambda", "char/data/roman/um", "char/data/roman/un", "char/data/greek/u-xi", "char/data/roman/uo", "char/data/greek/u-pi", "char/data/roman/up", "char/data/greek/u-sigma", "char/data/roman/ut", "char/data/greek/u-upsilon", "char/data/greek/u-phi", "char/data/roman/ux", "char/data/greek/u-psi", "char/data/greek/u-omega", "char/data/roman/a", "char/data/roman/b", "char/data/roman/c", "char/data/roman/d", "char/data/roman/e", "char/data/roman/f", "char/data/roman/g", "char/data/roman/h", "char/data/roman/i", "char/data/roman/j", "char/data/roman/k", "char/data/roman/l", "char/data/roman/m", "char/data/roman/n", "char/data/roman/o", "char/data/roman/p", "char/data/roman/q", "char/data/roman/r", "char/data/roman/s", "char/data/roman/t", "char/data/roman/u", "char/data/roman/v", "char/data/roman/w", "char/data/roman/x", "char/data/roman/y", "char/data/roman/z", "char/data/roman/uc", "char/data/roman/ud", "char/data/roman/uf", "char/data/roman/ug", "char/data/roman/uj", "char/data/roman/ul", "char/data/roman/uq", "char/data/roman/ur", "char/data/roman/us", "char/data/roman/uu", "char/data/roman/uv", "char/data/roman/uw", "char/data/roman/uy" ], function(require, exports, module) {
     return {
         // 标准字体
         std: {
@@ -212,6 +212,9 @@ define("char/data", [ "char/data/number/0", "char/data/number/1", "char/data/num
             ".": require("char/data/symbol/point"),
             "{": require("char/data/symbol/l-braces"),
             "}": require("char/data/symbol/r-braces"),
+            "\\infty\\": require("char/data/symbol/infty"),
+            "∞": require("char/data/symbol/infty"),
+            "\\to\\": require("char/data/symbol/to"),
             // greek
             "α": require("char/data/greek/alpha"),
             "\\alpha\\": require("char/data/greek/alpha"),
@@ -2029,6 +2032,17 @@ define("char/data/symbol/gt", [], {
     box: "M 0 0 L 18 0 L 18 27 L 0 27 Z"
 });
 /**
+ * 字符data: ∞
+ */
+define("char/data/symbol/infty", [], {
+    path: "M4.805,6.529c1.656,0,2.904,0.648,3.96,1.464c0.648,0.528,1.056,0.937,1.776,1.873l0.336,0.456l0.168-0.24   c0.888-1.272,2.185-2.592,3.625-3.168c0.648-0.24,1.32-0.384,1.968-0.384c0.528,0,1.056,0.096,1.512,0.264   c1.776,0.72,3.216,2.688,3.216,5.208v0.168c-0.096,1.752-0.888,3.336-1.944,4.176c-0.72,0.624-1.656,1.056-2.88,1.056   c-1.632,0-2.88-0.648-3.912-1.464c-0.648-0.528-1.056-0.936-1.776-1.872l-0.336-0.456l-0.168,0.24   c-0.888,1.272-2.184,2.592-3.625,3.168c-0.648,0.24-1.32,0.384-1.968,0.384c-0.528,0-1.056-0.096-1.512-0.264   c-1.776-0.72-3.216-2.688-3.216-5.208v-0.168c0.096-1.752,0.888-3.336,1.944-4.176C2.741,6.937,3.653,6.529,4.805,6.529z    M0.917,12.001c0,1.92,1.032,3.696,2.472,4.152c0.336,0.12,0.672,0.192,1.056,0.192c0.816,0,1.704-0.288,2.497-0.792   c0.984-0.648,1.896-1.729,2.712-3.048l-0.744-0.96c-0.408-0.528-0.84-1.08-0.96-1.224c-1.152-1.392-2.088-2.088-3.12-2.256   C4.685,8.041,4.493,8.017,4.301,8.017C2.117,8.017,0.917,10.057,0.917,12.001z M20.479,11.929c0-2.28-1.32-4.32-3.504-4.32   c-0.84,0-1.728,0.264-2.496,0.768c-1.008,0.648-1.92,1.728-2.736,3.048l0.744,0.96c0.408,0.528,0.84,1.08,0.96,1.224   c1.32,1.632,2.4,2.304,3.625,2.304C19.23,15.914,20.479,13.874,20.479,11.929z",
+    offset: {
+        x: 0,
+        y: 2
+    },
+    box: "M 0 0 L 22 0 L 22 27 L 0 27 Z"
+});
+/**
  * 字符data: {
  */
 define("char/data/symbol/l-braces", [], {
@@ -2159,6 +2173,17 @@ define("char/data/symbol/slash", [], {
         y: 2
     },
     box: "M 0 0 L 12 0 L 12 27 L 0 27 Z"
+});
+/**
+ * 字符data: →
+ */
+define("char/data/symbol/to", [], {
+    path: "M0.336,10.657h18.361c-1.224-0.912-2.016-1.872-2.64-3.072c-0.384-0.744-0.672-1.608-0.792-2.28   c0-0.072-0.024-0.12-0.024-0.168c0-0.24,0.168-0.264,0.48-0.264c0.384,0,0.432,0.048,0.504,0.336   c0.048,0.288,0.168,0.72,0.264,0.984c0.696,2.088,2.376,3.936,4.608,4.68c0.144,0.048,0.216,0.12,0.216,0.264   s-0.072,0.216-0.216,0.264c-2.208,0.744-3.912,2.592-4.608,4.68c-0.096,0.264-0.216,0.696-0.264,0.96   c-0.072,0.312-0.12,0.36-0.504,0.36c-0.36,0-0.504-0.072-0.504-0.264c0-0.144,0.072-0.336,0.144-0.6   c0.528-2.112,1.68-3.696,3.336-4.92H0.336C0.144,11.521,0,11.401,0,11.137S0.144,10.753,0.336,10.657z",
+    offset: {
+        x: 0,
+        y: 2
+    },
+    box: "M 0 0 L 22 0 L 22 27 L 0 27 Z"
 });
 /**
  * 字符data: |
@@ -3093,6 +3118,47 @@ define("expression/compound-exp/combination", [ "kity", "operator/combination", 
     });
 });
 /**
+ * 函数表达式
+ */
+define("expression/compound-exp/func", [ "kity", "operator/func", "char/roman", "operator/operator", "expression/compound", "expression/expression" ], function(require, exports, modules) {
+    var kity = require("kity"), FunctionOperator = require("operator/func");
+    return kity.createClass("FunctionExpression", {
+        base: require("expression/compound"),
+        /**
+         * function表达式构造函数
+         * @param funcName function名称
+         * @param funcExp function表达式
+         * @param sup 上标
+         * @param sub 下标
+         */
+        constructor: function(funcName, funcExp, sup, sub) {
+            this.callBase();
+            this.setOperator(new FunctionOperator(funcName));
+            this.setFuncExp(funcExp);
+            this.setSuperscript(sup);
+            this.setSubscript(sub);
+        },
+        setFuncExp: function(funcExp) {
+            return this.setOperand(funcExp, 0);
+        },
+        getFuncExp: function() {
+            return this.getOperand(0);
+        },
+        setSuperscript: function(sub) {
+            return this.setOperand(sub, 1);
+        },
+        getSuperscript: function() {
+            return this.getOperand(1);
+        },
+        setSubscript: function(sub) {
+            return this.setOperand(sub, 2);
+        },
+        getSubscript: function() {
+            return this.getOperand(2);
+        }
+    });
+});
+/**
  * 积分表达式
  */
 define("expression/compound-exp/integration", [ "kity", "operator/integration", "operator/operator", "expression/compound", "expression/expression" ], function(require, exports, modules) {
@@ -3284,7 +3350,8 @@ define("expression/expression", [ "kity", "signgroup" ], function(require, expor
  * 罗马文本表达式
  */
 define("expression/roman", [ "char/roman", "kity", "char/char", "signgroup", "expression/expression" ], function(require, exports, module) {
-    var RomanText = require("char/roman"), kity = require("kity"), RomanTextExpression = kity.createClass("RomanTextExpression", {
+    var RomanText = require("char/roman"), kity = require("kity");
+    return kity.createClass("RomanTextExpression", {
         base: require("expression/expression"),
         constructor: function(content) {
             this.callBase();
@@ -3292,7 +3359,6 @@ define("expression/roman", [ "char/roman", "kity", "char/char", "signgroup", "ex
             this.setChildren(0, new RomanText(this.content));
         }
     });
-    return RomanTextExpression;
 });
 /**
  * Text表达式
@@ -4436,7 +4502,7 @@ define("operator/binary", [ "kity", "operator/operator", "signgroup" ], function
  */
 define("operator/combination", [ "kity", "operator/operator", "signgroup" ], function(require, exports, modules) {
     var kity = require("kity");
-    return kity.createClass("BinaryOperator", {
+    return kity.createClass("CombinationOperator", {
         base: require("operator/operator"),
         constructor: function() {
             this.callBase("Combination");
@@ -4458,6 +4524,45 @@ define("operator/combination", [ "kity", "operator/operator", "signgroup" ], fun
             });
         }
     });
+});
+/**
+ * 函数操作符
+ */
+define("operator/func", [ "kity", "char/roman", "char/char", "signgroup", "operator/operator" ], function(require, exports, modules) {
+    var kity = require("kity"), RomanText = require("char/roman");
+    return kity.createClass("FunctionOperator", {
+        base: require("operator/operator"),
+        constructor: function(funcName) {
+            this.callBase("Function: " + funcName);
+            this.funcName = funcName;
+        },
+        /*
+         * 积分操作符应用操作数
+         * @param integrand 被积函数
+         * @param supOperand 上限
+         * @param subOperand 下限
+         */
+        applyOperand: function(funcExp, supOperand, subOperand) {
+            generateOperator.call(this);
+            adjustmentPosition.call(this, this.operatorShape, funcExp, supOperand, subOperand);
+        }
+    });
+    /* 返回操作符对象 */
+    function generateOperator() {
+        var textShape = new RomanText(this.funcName);
+        this.addOperatorShape(textShape);
+        textShape.addedCall();
+        return this.operatorShape;
+    }
+    function adjustmentPosition(operatorShape, funcExp, supOperand, subOperand) {
+        supOperand.setAnchor(0, 0).scale(.7);
+        subOperand.setAnchor(0, 0).scale(.7);
+        var opBox = operatorShape.getRenderBox(), supBox = supOperand.getRenderBox(), subBox = subOperand.getRenderBox(), expBox = funcExp.getRenderBox(), maxScriptHeight = Math.max(supBox.height, subBox.height), maxWidth = Math.max(opBox.width, subBox.width, supBox.width);
+        supOperand.translate((maxWidth - supBox.width) / 2, maxScriptHeight - supBox.height);
+        operatorShape.translate((maxWidth - opBox.width) / 2, maxScriptHeight);
+        subOperand.translate((maxWidth - subBox.width) / 2, maxScriptHeight + opBox.height);
+        funcExp.translate(maxWidth + 5, (maxScriptHeight * 2 + opBox.height - expBox.height) / 2);
+    }
 });
 /**
  * 积分操作符：∫
@@ -4695,6 +4800,7 @@ define("signgroup", [ "kity" ], function(require, exports, module) {
             RomanTextExpression: require( "expression/roman" ),
             EmptyExpression: require( "expression/empty" ),
             CombinationExpression: require( "expression/compound-exp/combination" ),
+            FunctionExpression: require( "expression/compound-exp/func" ),
 
             AdditionExpression: require( "expression/compound-exp/binary-exp/addition" ),
             AsteriskExpression: require( "expression/compound-exp/binary-exp/asterisk" ),

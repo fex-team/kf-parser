@@ -11,7 +11,7 @@ define( function ( require, exports, module ) {
      */
     return function ( data ) {
 
-        var pattern = /\\sqrt\s*(?:\[([^\]]*)\])?/g;
+        var pattern = /\\sqrt\b\s*(?:\[([^\]]*)\])?/g;
 
         return data.replace( pattern, function ( match, exponent ) {
 

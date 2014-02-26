@@ -5,10 +5,13 @@
 define( function ( require, exports, module ) {
 
     var Parser = require( "parser" ).Parser,
-        FUN = require( "impl/latex/fun" ).operator;
+        MAPPING = require( "impl/latex/fun"),
+        OP = MAPPING.operator,
+        DEFAULT_PRE_HANDLER = require( "impl/latex/pre/default" ),
+        Checker = require( "impl/latex/checker" );
 
     // data
-    var leftChar = "\ufeff",
+    var leftChar = "\ufff8",
         rightChar = "\ufffc";
 
     Parser.register( "latex", Parser.implement( {
@@ -28,10 +31,16 @@ define( function ( require, exports, module ) {
 
             var preFn = null;
 
-            // 调用各个操作符来进行预处理
-            for ( var op in FUN ) {
+            // 清理多余的空格
+            data = clearEmpty( data );
 
-                preFn = FUN[ op ].pre;
+            // 处理输入的“{”和“}”
+            data = data.replace( /\\{/gi, leftChar ).replace( /\\}/gi, rightChar );
+
+            // 调用各个操作符来进行预处理
+            for ( var op in OP ) {
+
+                preFn = OP[ op ].pre;
 
                 if ( preFn ) {
                     data = preFn( data );
@@ -39,27 +48,25 @@ define( function ( require, exports, module ) {
 
             }
 
-            return data;
+            // 交由默认预处理器处理
+            return DEFAULT_PRE_HANDLER( data );
 
         },
 
         split: function ( data ) {
 
             var units = [],
-                leftPattern = /\\{/g,
-                rightPattern = /\\}/g,
                 replacePattern = new RegExp( leftChar+"|"+rightChar, "g" ),
-                pattern = /(?:\\[a-z0-9]+)|(?:[{}])|(?:[^\\{}])/gi,
+                pattern = /(?:\\[a-z0-9]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
+                emptyPattern = /^\s+|\s+$/g,
                 match = null;
 
-            data = data.replace( /\s+/g, " " )
-                       .replace( replacePattern, "" )
-                       .replace( leftPattern, leftChar )
-                       .replace( rightPattern, rightChar );
+            data = data.replace( emptyPattern, "" )
+                       .replace( replacePattern, "" );
 
             while ( match = pattern.exec( data ) ) {
 
-                match = match[ 0 ];
+                match = match[ 0 ].replace( emptyPattern, "" );
 
                 if ( match ) {
 
@@ -176,7 +183,16 @@ define( function ( require, exports, module ) {
 
         if ( operator === null ) {
 
-            return str.replace( /\s+/g, "" );
+            if ( Checker.isFunc( str ) ) {
+                return {
+                    originOperator: "func",
+                    operator: "Function",
+                    params: str.replace( /\\/gi, "" ),
+                    operand: []
+                };
+            }
+
+            return transformSpecialCharacters( str );
 
         } else {
 
@@ -198,7 +214,7 @@ define( function ( require, exports, module ) {
 
         str = str.length > 1 ? str.replace( "\\", "" ) : str;
         // 对应的函数对象
-        str = FUN[ str ];
+        str = OP[ str ];
 
         return str ? str.name : null;
 
@@ -229,7 +245,7 @@ define( function ( require, exports, module ) {
         }
 
         // 顺序组合序列存储的树里的语法单元
-        processedResult = processOperator( parser, sequenceTree );
+        processedResult = processOperator( sequenceTree );
 
         // 合并文本单元
         textResult = mergeText( processedResult );
@@ -248,7 +264,7 @@ define( function ( require, exports, module ) {
         // 处理文本节点
         units = mergeText( units );
 
-        units = processOperator( parser, units );
+        units = processOperator( units );
 
         return mergeAllUnits( units );
 
@@ -259,7 +275,7 @@ define( function ( require, exports, module ) {
      * 处理操作符， 使得语法单元中的操作数根据操作符的规则被组合在一起
      * @return {Array} 返回已经处理过数据操作符后的语法单元数组
      */
-    function processOperator ( parser, units ) {
+    function processOperator ( units ) {
 
         var unit = null,
             handler = null,
@@ -284,11 +300,11 @@ define( function ( require, exports, module ) {
                 } else {
 
                     // handler代表函数对应的处理器
-                    handler = FUN[ unit.originOperator ].handler;
+                    handler = OP[ unit.originOperator ].handler;
                     // handler代表处理过后的结果集
-                    handler = handler.call( parser, unit.operator, units, processedResult );
+                    handler = handler.call( unit, unit.operator, units, processedResult );
                     // 验证操作符处理后的结果， 如果验证失败， 会抛出异常
-                    validOperatorResult( handler, parser );
+                    validOperatorResult( handler );
                     processedResult.push( handler );
 
                 }
@@ -317,8 +333,6 @@ define( function ( require, exports, module ) {
             currUnit = units[ i ];
 
             if ( typeof currUnit === "string" ) {
-
-                currUnit = transformSpecialCharacters( currUnit );
 
                 if ( text === null ) {
                     text = currUnit;
@@ -355,11 +369,11 @@ define( function ( require, exports, module ) {
         }
 
         units.unshift( 'combination' );
-        return FUN[ 'combination' ].handler.apply( null, units );
+        return OP[ 'combination' ].handler.apply( null, units );
 
     }
 
-    function validOperatorResult ( result, parser ) {
+    function validOperatorResult ( result ) {
 
         var operands = result.operand,
             curOperand = null;
@@ -377,7 +391,7 @@ define( function ( require, exports, module ) {
                         throw new Error( "operator error: " + curOperand.operator + " Untreated" );
                     } else {
                         // 处理操作符
-                        operands[ i ] = FUN[ curOperand.originOperator ].handler.call( parser, curOperand.operator, [], [] );
+                        operands[ i ] = OP[ curOperand.originOperator ].handler.call( curOperand, curOperand.operator, [], [] );
                     }
 
                 }
@@ -394,6 +408,7 @@ define( function ( require, exports, module ) {
 
     }
 
+    // 转换特殊的文本字符
     function transformSpecialCharacters ( char ) {
 
         if ( char.indexOf( "\\" ) === 0 ) {
@@ -401,6 +416,16 @@ define( function ( require, exports, module ) {
         }
 
         return char;
+
+    }
+
+    function clearEmpty ( data ) {
+
+        return data.replace( /\\\s+/, "" ).replace( /\s*([^a-z0-9\s])\s*/gi, function ( match, symbol ) {
+
+            return symbol;
+
+        } );
 
     }
 

@@ -53,8 +53,6 @@
 
                 var value = document.getElementById( "latexInput" ).value;
 
-                var t = latexParser.parse( value )
-                debugger;
                 assembly.regenerateBy( latexParser.parse( value ) );
 
             };
@@ -72,7 +70,8 @@
 <body>
     <div class="main">
         <div id="editor">
-            <textarea id="latexInput">\int^{n}_{n=20}{n*3}</textarea>
+            <!--<textarea id="latexInput">\int^{n}_{n=20}{n*3}</textarea>-->
+            <textarea id="latexInput">\lim_{x\to\infty}{a-b}</textarea>
         </div>
         <div class="split">
             <button id="parseBtn" type="button">转换</button>
