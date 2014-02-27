@@ -10,9 +10,13 @@ define( function ( require, exports, module ) {
 
         var params = extractFn( unprocessedUnits );
 
+        debugger;
         return {
             operator: this.operator,
-            operand: [ params.exp, params.sup, params.sub ]
+            operand: [ params.exp, params.sup, params.sub ],
+            callFn: {
+                setType: [ params.count ]
+            }
         };
 
     };

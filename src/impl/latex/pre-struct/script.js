@@ -14,6 +14,7 @@ define( function () {
 
             currentStruct = structs.shift();
 
+            debugger;
             if ( currentStruct && typeof currentStruct === "object" ) {
 
                 if ( currentStruct.operator !== "Subscript" && currentStruct.operator !== "Superscript" ) {

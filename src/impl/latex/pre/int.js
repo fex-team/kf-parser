@@ -6,10 +6,9 @@ define( function () {
 
     return function ( input ) {
 
-        input.replace( /\\(i+)nt\\b/g, function ( match, intStr, suffix ) {
+        return input.replace( /\\(i+)nt([^a-zA-Z]?)/g, function ( match, intStr, suffix ) {
 
-            debugger;
-            return
+            return "\\int" + intStr.length +suffix;
 
         } );
 

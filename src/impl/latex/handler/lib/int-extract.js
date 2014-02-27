@@ -6,7 +6,8 @@ define( function ( require, exports, module ) {
 
     return function ( units ) {
 
-        var sup = units.shift() || null,
+        var count = units.shift(),  // 积分重数
+            sup = units.shift() || null,
             sub = null,
             exp = null;
 
@@ -72,7 +73,8 @@ define( function ( require, exports, module ) {
         return {
             sub: sub,
             sup: sup,
-            exp: exp
+            exp: exp,
+            count: count
         };
 
     };

@@ -52,7 +52,7 @@ define( function ( require, exports, module ) {
 
             var units = [],
                 replacePattern = new RegExp( leftChar+"|"+rightChar, "g" ),
-                pattern = /(?:\\[a-z0-9]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
+                pattern = /(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
                 emptyPattern = /^\s+|\s+$/g,
                 match = null;
 
