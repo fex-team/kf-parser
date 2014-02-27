@@ -4,13 +4,11 @@
 
 define( function ( require, exports, module ) {
 
-    return function ( operatorName ) {
-
-        var args = [].slice.call( arguments, 1 );
+    return function () {
 
         return {
-            operator: operatorName,
-            operand: args
+            name: "combination",
+            operand: arguments[ 0 ]
         };
 
     };

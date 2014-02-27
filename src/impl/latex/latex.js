@@ -5,7 +5,7 @@
 define( function ( require, exports, module ) {
 
     var Parser = require( "parser" ).Parser,
-        OP = require( "impl/latex/define/operator" ),
+        LatexUtils = require( "impl/latex/base/latex-utils" ),
         Utils = require( "impl/latex/base/utils" );
 
     // data
@@ -18,7 +18,9 @@ define( function ( require, exports, module ) {
 
             var units = this.split( this.format( data ) );
 
-            units = this.restructuring( units );
+            units = this.parseToGroup( units );
+
+            units = this.parseToStruct( units );
 
             return this.generateTree( units );
 
@@ -32,17 +34,6 @@ define( function ( require, exports, module ) {
 
             // 处理输入的“{”和“}”
             input = input.replace( /\\{/gi, leftChar ).replace( /\\}/gi, rightChar );
-
-            // 预处理
-            for ( var key in OP ) {
-
-                if ( OP[ key ] && OP[ key ].pre && OP.hasOwnProperty( key ) ) {
-
-                    input = OP[ key ].pre( input );
-
-                }
-
-            }
 
             return input;
 
@@ -75,48 +66,6 @@ define( function ( require, exports, module ) {
 
         },
 
-        /**
-         * 对给定的单元进行重组， 使其从序列化的存储转到结构化的存储
-         * @param units 需要重组的单元
-         * @return {Array} 重组后的单元对象
-         */
-        restructuring: function ( units ) {
-
-            var root = [],
-                // group 栈
-                stack = [ root ],
-                curGroup = stack[ 0 ],
-                replacePattern = new RegExp( leftChar+"|"+rightChar, "g" );
-
-            for ( var i = 0, currentUnit, len = units.length; i < len; i++ ) {
-
-                switch ( currentUnit = units[ i ] ) {
-
-                    case "{":
-                        curGroup.push( [] );
-                        curGroup = curGroup[ curGroup.length - 1 ];
-                        stack.push( curGroup );
-                        break;
-
-                    case "}":
-                        stack.pop();
-                        curGroup = stack[ stack.length - 1 ];
-                        break;
-
-                    default:
-                        curGroup.push( currentUnit.replace( replacePattern, function ( char ) {
-
-                            return char === leftChar ? "{" : "}";
-
-                        } ).replace( /\s+/g, "" ) );
-
-                }
-
-            }
-
-            return root;
-
-        },
 
         /**
          * 根据解析出来的语法单元生成树
@@ -125,41 +74,72 @@ define( function ( require, exports, module ) {
          */
         generateTree: function ( units ) {
 
-            return generate( units );
+            units = LatexUtils.toRPNExpression( units );
+
+            var t = LatexUtils.generateTree( units );
+
+            debugger;
+
+            return t;
+
+        },
+
+        parseToGroup: function ( units ) {
+
+            var group = [],
+                groupPointer = group,
+                groupCount = 0;
+
+            for ( var i = 0, len = units.length; i < len; i++ ) {
+
+                switch ( units[i] ) {
+
+                    case "{":
+                        groupCount++;
+                        group.push( [] );
+                        group = group[ group.length - 1 ];
+                        break;
+                    case "}":
+                        groupCount--;
+                        group = groupPointer;
+                        break;
+
+                    default:
+                        group.push( units[i] );
+                        break;
+
+                }
+
+            }
+
+            if ( groupCount !== 0 ) {
+                throw new Error( "Group Error!" );
+            }
+
+            return groupPointer;
+
+        },
+
+        parseToStruct: function ( units ) {
+
+            var structs = [];
+
+            for ( var i = 0, len = units.length; i < len; i++ ) {
+
+                if ( Utils.isArray( units[ i ] ) ) {
+                    structs.push( this.parseToStruct( units[ i ] ) );
+                } else {
+                    structs.push( parseStruct( units[ i ] ) );
+                }
+
+            }
+
+            return structs;
 
         }
 
     } ) );
 
-    /**
-     * 生成解析树
-     */
-    function generate ( units ) {
-
-        // 顺序存储的树结构
-        var sequenceTree = [];
-
-        // 逆序递归处理每一个语法单元
-        for ( var i = 0, currentUnit, len = units.length; i < len; i++ ) {
-
-            currentUnit = units[ i ];
-
-            if ( Utils.isArray( currentUnit ) ) {
-
-                sequenceTree.push( generate( currentUnit ) );
-
-            } else {
-
-                sequenceTree.push( parseStruct( currentUnit ) );
-
-            }
-
-        }
-
-
-        return combinationTree( preCombinationTree( sequenceTree ) );
-
-    }
 
     /**
      * 把序列化的字符串表示法转化为中间格式的结构化表示
@@ -173,10 +153,7 @@ define( function ( require, exports, module ) {
 
             case "operator":
 
-                return {
-                    operator: Utils.getOperatorName( str ),
-                    handler: Utils.getOperatorHandler( str )
-                };
+                return Utils.getDefine( str );
 
             case "function":
 
@@ -191,132 +168,6 @@ define( function ( require, exports, module ) {
                 return transformSpecialCharacters( str );
 
         }
-
-    }
-
-    /**
-     * 把序列化存储的树结构进行整合， 生成最终的解析树
-     * @param sequenceTree 序列化存储的树
-     */
-    function combinationTree ( sequenceTree ) {
-
-        // 已处理过的结果集
-        var processedResult = [],
-            struct = null,
-            max_count = 2000;
-
-        while ( sequenceTree.length && --max_count ) {
-
-            struct = sequenceTree.shift();
-
-            if ( Utils.isArray( struct ) ) {
-
-                processedResult.push( combinationTree( struct ) );
-
-            } else if ( typeof struct === "string" ) {
-
-                processedResult.push( struct );
-
-            } else if ( struct.handler ) {
-                // 未处理操作符
-
-                processedResult.push( struct.handler.call( struct, processedResult, sequenceTree ) );
-
-            } else {
-
-                //已处理操作符
-                processedResult.push( struct );
-
-            }
-
-        }
-
-        if ( max_count === 0 ) {
-            throw new Error( 'call stack overflow' );
-        }
-
-        // 合并文本单元
-        processedResult = mergeText( processedResult );
-
-        // 返回组合了文本单元和其他单元的树对象
-        return mergeAllUnits( processedResult );
-
-    }
-
-    /**
-     * 组合前的结构预处理
-     * @param sequenceStruct 顺序存储的结构
-     * @return sequenceStruct 被处理过后的结构
-     */
-    function preCombinationTree ( sequenceStruct ) {
-
-        for ( var key in OP ) {
-
-            if ( OP[ key ] && OP[ key ].preStructFn && OP.hasOwnProperty( key ) ) {
-
-                sequenceStruct = OP[ key ].preStructFn( sequenceStruct );
-
-            }
-
-        }
-
-        return sequenceStruct;
-
-    }
-
-    /**
-     * 合并多个语法单元中连续的文本
-     */
-    function mergeText ( units ) {
-
-        var result = [],
-            text = null,
-            currUnit = null;
-
-        // 合并连续的文本节点
-        for ( var i = 0, len = units.length; i < len; i++ ) {
-
-            // 当前处理的语法单元
-            currUnit = units[ i ];
-
-            if ( typeof currUnit === "string" ) {
-
-                if ( text === null ) {
-                    text = currUnit;
-                } else {
-                    text += currUnit;
-                }
-
-            } else {
-
-                if ( text !== null ) {
-                    result.push( text );
-                    text = null;
-                }
-
-                result.push( currUnit );
-
-            }
-
-        }
-
-        // 别忘了最后结尾的文本单元
-        if ( text !== null ) {
-            result.push( text );
-        }
-
-        return result;
-
-    }
-
-    function mergeAllUnits ( units ) {
-
-        if ( units.length === 0 ) {
-            return null;
-        }
-
-        units.unshift( 'combination' );
-        return OP[ 'combination' ].handler.apply( null, units );
 
     }
 

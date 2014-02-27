@@ -6,82 +6,80 @@ define( function ( require, exports, module ) {
 
     var binaryHandler = require( "impl/latex/handler/binary" ),
         scriptHandler = require( "impl/latex/handler/script" ),
-        // 上下标结构预处理
-        scriptPreStructFn = require( "impl/latex/pre-struct/script" );
+        TYPE = require( "impl/latex/define/type" );
 
     return {
 
-        "combination": {
-            name: "combination",
-            handler: require( "impl/latex/handler/combination" )
+        "{": {
+            name: "left-brackets",
+            type: TYPE.OP,
+            handler: true,
+            priority: 99
+        },
+        "}": {
+            name: "right-brackets",
+            type: TYPE.OP,
+            handler: true,
+            priority: 99
         },
         "+": {
-            name: "addition",
-            handler: binaryHandler
+            name: "addition"
         },
         "-": {
-            name: "subtraction",
-            handler: binaryHandler
+            name: "subtraction"
         },
         "times": {
-            name: "multiplication",
-            handler: binaryHandler
+            name: "multiplication"
         },
         "div": {
-            name: "division",
-            handler: binaryHandler
+            name: "division"
         },
         "cdot": {
-            name: "dot",
-            handler: binaryHandler
+            name: "dot"
         },
         "=": {
-            name: "eq",
-            handler: binaryHandler
+            name: "eq"
         },
         "*": {
-            name: "asterisk",
-            handler: binaryHandler
+            name: "asterisk"
         },
         "pm": {
-            name: "plus-minus",
-            handler: binaryHandler
+            name: "plus-minus"
         },
         "mp": {
-            name: "minus-plus",
-            handler: binaryHandler
+            name: "minus-plus"
         },
         "^": {
             name: "superscript",
-            preStructFn: scriptPreStructFn,
-            handler: scriptHandler
+            type: TYPE.OP,
+            handler: scriptHandler,
+            priority: 3
         },
         "_": {
             name: "subscript",
-            preStructFn: scriptPreStructFn,
-            handler: scriptHandler
+            type: TYPE.OP,
+            handler: scriptHandler,
+            priority: 3
         },
         "frac": {
             name: "fraction",
+            type: TYPE.FN,
             handler: require( "impl/latex/handler/fraction" )
         },
         "sqrt": {
             name: "radical",
-            pre: require( "impl/latex/pre/sqrt" ),
+            type: TYPE.FN,
             handler: require( "impl/latex/handler/radical" )
         },
         "sum": {
             name: "summation",
+            type: TYPE.FN,
             handler: require( "impl/latex/handler/summation" )
         },
         "int": {
             name: "integration",
-            pre: require( "impl/latex/pre/int" ),
+            type: TYPE.FN,
             handler: require( "impl/latex/handler/integration" )
-        },
-        "func": {
-            name: "function",
-            handler: require( "impl/latex/handler/func" )
         }
 
     };

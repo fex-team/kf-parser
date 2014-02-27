@@ -1,16 +1,12 @@
 /**
- * 操作符定义
+ * 操作符类型定义
  */
 
 define( function ( require, exports, module ) {
 
     return {
-
-        // 不允许未空的操作符
-        notAllowEmpty: {
-            'frac': 1
-        }
-
+        OP: 1,
+        FN: 2
     };
 
 } );

@@ -38,7 +38,7 @@ define( function ( require, exports, module ) {
 
         var currentOperand = null,
             exp = null,
-            operand = tree.operand,
+            operand = tree.operand || [],
             constructor = null,
             constructorProxy;
 
@@ -55,7 +55,7 @@ define( function ( require, exports, module ) {
 
         }
 
-        constructor = getConstructor( tree.operator );
+        constructor = getConstructor( tree.name );
 
         if ( !constructor ) {
             throw new Error( 'operator type error: not found ' + tree.operator );

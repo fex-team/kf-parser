@@ -1,5 +1,5 @@
 /**
- * latex实现工具包
+ * 通用工具包
  */
 
 define( function ( require, exports, module ) {
@@ -33,30 +33,29 @@ define( function ( require, exports, module ) {
 
             },
 
-            getOperatorName: function ( str ) {
+            getDefine: function ( str ) {
 
-                str = str.replace( /^\\/, "" );
-
-                str = OPERATOR_LIST[ str ].name;
-
-                return str.replace( /^\w|-\w/gi, function ( match ) {
-
-                    return match.length === 1 ? match.toUpperCase() : match.charAt( 1 ).toUpperCase();
-
-                } );
-
-            },
-
-
-            getOperatorHandler: function ( str ) {
-
-                return OPERATOR_LIST[ str.replace( /^\\/, "" ) ].handler;
+                return Utils.extend( {}, OPERATOR_LIST[ str.replace("\\", "") ] );
 
             },
 
             getFunctionHandler: function () {
 
                 return OPERATOR_LIST[ "func" ];
+
+            },
+
+            extend: function ( target, sources ) {
+
+                for ( var key in sources ) {
+
+                    if ( sources.hasOwnProperty( key ) ) {
+                        target[ key ] = sources[ key ];
+                    }
+
+                }
+
+                return target;
 
             }
 

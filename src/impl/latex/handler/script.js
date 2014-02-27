@@ -5,24 +5,39 @@
 define( function ( require, exports, module ) {
 
     // 处理函数接口
-    return function ( processedUnits, unprocessedUnits ) {
+    return function ( info, base, script ) {
 
-        var script = unprocessedUnits.shift() || null,
-            // 底数
-            base = processedUnits.pop() || null;
+        base = base || null;
 
-        if ( base && typeof base === "object" ) {
+        if ( !script ) {
+            throw new Error( "Missing script" );
+        }
 
-            if ( base.operator === "Subscript" || base.operator === "Superscript" ) {
-                throw new Error( 'Syntax Error: Subscript or Superscript' );
-            }
+        if ( base.name === info.name || base.name === "script" ) {
+            throw new Error( "script error" );
+        }
+
+        // 执行替换
+        if ( base.name === "subscript" ) {
+
+            base.name = "script";
+            base.operand[ 2 ] = info.operand[ 1 ];
+            base.operand[ 1 ] = script;
+
+            return base;
+
+        } else if ( base.name === "superscript" ) {
+
+            base.name = "script";
+            base.operand[ 2 ] = script;
+
+            return base;
 
         }
 
-        return {
-            operator: this.operator,
-            operand: [ base, script ]
-        };
+        info.operand = [ base, script ];
+
+        return info;
 
     };
 
