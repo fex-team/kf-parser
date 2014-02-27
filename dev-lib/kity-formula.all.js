@@ -3003,19 +3003,12 @@ define("expression/compound-exp/binary-exp/relational/simeq", [ "kity", "operato
 /**
  * 下标表达式
  */
-define("expression/compound-exp/binary-exp/subscript", [ "kity", "operator/binary-opr/subscript", "operator/binary", "expression/compound-exp/binary", "expression/compound" ], function(require, exports, modules) {
-    var kity = require("kity"), SubscriptExpression = require("operator/binary-opr/subscript");
-    return kity.createClass("SubExpression", {
-        base: require("expression/compound-exp/binary"),
+define("expression/compound-exp/binary-exp/subscript", [ "kity", "expression/compound-exp/script", "operator/script", "expression/compound" ], function(require, exports, modules) {
+    var kity = require("kity");
+    return kity.createClass("SubscriptExpression", {
+        base: require("expression/compound-exp/script"),
         constructor: function(operand, subscript) {
-            this.callBase(operand, subscript);
-            this.setOperator(new SubscriptExpression());
-        },
-        getBaseHeight: function() {
-            return this.getFirstOperand().getBaseHeight();
-        },
-        getBaseWidth: function() {
-            return this.getFirstOperand().getBaseWidth();
+            this.callBase(operand, null, subscript);
         }
     });
 });
@@ -3035,19 +3028,12 @@ define("expression/compound-exp/binary-exp/subtraction", [ "kity", "operator/bin
 /**
  * 上标表达式
  */
-define("expression/compound-exp/binary-exp/superscript", [ "kity", "operator/binary-opr/superscript", "operator/binary", "expression/compound-exp/binary", "expression/compound" ], function(require, exports, modules) {
-    var kity = require("kity"), SuperscriptOperator = require("operator/binary-opr/superscript");
+define("expression/compound-exp/binary-exp/superscript", [ "kity", "expression/compound-exp/script", "operator/script", "expression/compound" ], function(require, exports, modules) {
+    var kity = require("kity");
     return kity.createClass("SuperscriptExpression", {
-        base: require("expression/compound-exp/binary"),
+        base: require("expression/compound-exp/script"),
         constructor: function(operand, superscript) {
-            this.callBase(operand, superscript);
-            this.setOperator(new SuperscriptOperator());
-        },
-        getBaseHeight: function() {
-            return this.getFirstOperand().getBaseHeight();
-        },
-        getBaseWidth: function() {
-            return this.getFirstOperand().getBaseWidth();
+            this.callBase(operand, superscript, null);
         }
     });
 });
@@ -3206,6 +3192,40 @@ define("expression/compound-exp/integration", [ "kity", "operator/integration", 
     return IntegrationExpression;
 });
 /**
+ * 上标表达式
+ */
+define("expression/compound-exp/script", [ "kity", "operator/script", "operator/operator", "expression/compound", "expression/expression" ], function(require, exports, modules) {
+    var kity = require("kity"), ScriptOperator = require("operator/script");
+    return kity.createClass("ScriptExpression", {
+        base: require("expression/compound"),
+        constructor: function(operand, superscript, subscript) {
+            this.callBase();
+            this.setOperator(new ScriptOperator());
+            this.setOpd(operand);
+            this.setSuperscript(superscript);
+            this.setSubscript(subscript);
+        },
+        setOpd: function(operand) {
+            this.setOperand(operand, 0);
+        },
+        setSuperscript: function(sup) {
+            this.setOperand(sup, 1);
+        },
+        setSubscript: function(sub) {
+            this.setOperand(sub, 2);
+        },
+        getOpd: function() {
+            this.getOperand(0);
+        },
+        getSuperscript: function() {
+            this.getOperand(1);
+        },
+        getSubscript: function() {
+            this.getOperand(2);
+        }
+    });
+});
+/**
  * 求和表达式
  * @abstract
  */
@@ -3291,19 +3311,7 @@ define("expression/compound", [ "kity", "expression/expression", "signgroup" ], 
  */
 define("expression/empty", [ "kity", "expression/expression", "signgroup" ], function(require, exports, module) {
     var kity = require("kity"), Expression = require("expression/expression"), EmptyExpression = kity.createClass("EmptyExpression", {
-        base: Expression,
-        getBaseWidth: function() {
-            return 0;
-        },
-        getBaseHeight: function() {
-            return 0;
-        },
-        getWidth: function() {
-            return 0;
-        },
-        getHeight: function() {
-            return 0;
-        }
+        base: Expression
     });
     // 注册打包函数
     Expression.registerWrap(function(operand) {
@@ -3576,11 +3584,7 @@ define("operator/binary-opr/left-right", [ "kity", "operator/binary", "operator/
         base: require("operator/binary"),
         applyOperand: function(leftOperand, rightOperand) {
             var operator = this, operatorBox = operator.getRenderBox(), // 操作数特殊处理
-            leftOperandBox = kity.Utils.extend(leftOperand.getRenderBox(), {
-                height: leftOperand.getBaseHeight()
-            }), rightOperandBox = kity.Utils.extend(rightOperand.getRenderBox(), {
-                height: rightOperand.getBaseHeight()
-            }), // 偏移量
+            leftOperandBox = leftOperand.getRenderBox(), rightOperandBox = rightOperand.getRenderBox(), // 偏移量
             offset = 0, // 操作对象最大高度
             maxHeight = Math.max(leftOperandBox.height, rightOperandBox.height, operatorBox.height);
             // 左操作数
@@ -4414,25 +4418,6 @@ define("operator/binary-opr/relational/simeq", [ "kity", "operator/binary-opr/le
     });
 });
 /**
- * 下标操作符
- */
-define("operator/binary-opr/subscript", [ "kity", "operator/binary", "operator/operator" ], function(require, exports, modules) {
-    var kity = require("kity");
-    return kity.createClass("SubscriptOperator", {
-        base: require("operator/binary"),
-        constructor: function() {
-            this.callBase("Subscript");
-            this.setBoxSize(0, 0);
-        },
-        applyOperand: function(operand, subscript) {
-            var operandBox = operand.getRenderBox(), subBox = subscript.getRenderBox();
-            subscript.setAnchor(0, subBox.y + subBox.height);
-            subscript.scale(.7);
-            subscript.translate(operandBox.x + operandBox.width + 2, 3);
-        }
-    });
-});
-/**
  * 减法操作符
  */
 define("operator/binary-opr/subtraction", [ "kity", "operator/binary-opr/left-right", "operator/binary" ], function(require, exports, module) {
@@ -4442,25 +4427,6 @@ define("operator/binary-opr/subtraction", [ "kity", "operator/binary-opr/left-ri
         constructor: function() {
             this.callBase("Subtraction");
             this.addOperatorShape(new kity.Rect(5, 13, 17, 1, 1).fill("black"));
-        }
-    });
-});
-/**
- * 上标操作符
- */
-define("operator/binary-opr/superscript", [ "kity", "operator/binary", "operator/operator" ], function(require, exports, modules) {
-    var kity = require("kity");
-    return kity.createClass("SuperscriptOperator", {
-        base: require("operator/binary"),
-        constructor: function() {
-            this.callBase("Superscript");
-            this.setBoxSize(0, 0);
-        },
-        applyOperand: function(operand, superscript) {
-            var operandBox = operand.getRenderBox();
-            superscript.setAnchor(0, 0);
-            superscript.scale(.7);
-            superscript.translate(operandBox.x + operandBox.width + 2, -3);
         }
     });
 });
@@ -4760,18 +4726,31 @@ define("operator/operator", [ "kity", "signgroup" ], function(require, exports, 
     });
 });
 /**
- * 自由空间操作符
+ * 上下标操作符
  */
-define("operator/space", [ "kity", "operator/operator", "signgroup" ], function(require, exports, modules) {
+define("operator/script", [ "kity", "operator/operator", "signgroup" ], function(require, exports, module) {
     var kity = require("kity");
-    return kity.createClass("SpaceOperator", {
+    return kity.createClass("SubtractionOperator", {
         base: require("operator/operator"),
-        constructor: function(w, h) {
-            this.callBase("Space");
-            w = w || 0;
-            h = h || 27;
-            // 绘制符号图形
-            this.addOperatorShape(new kity.Rect(0, 0, w, h).fill("transparent"));
+        constructor: function(operatorName) {
+            this.callBase(operatorName || "Script");
+        },
+        applyOperand: function(operand, sup, sub) {
+            sub.setAnchor(0, 0).scale(.7);
+            sup.setAnchor(0, 0).scale(.7);
+            var operandBox = operand.getRenderBox(), supBox = sup.getRenderBox(), subBox = sub.getRenderBox(), maxScriptHeight = Math.max(supBox.height, subBox.height) / 3, maxScriptWidth = Math.max(supBox.width, subBox.width), // Y轴偏移
+            offset = 0, // 上下标和操作数之间的横向间距
+            SPACE = 1, boxSize = {
+                w: operandBox.width + SPACE + maxScriptWidth,
+                h: maxScriptHeight * 2 + operandBox.height
+            };
+            this.setBoxSize(boxSize.w, boxSize.h);
+            offset = maxScriptHeight - supBox.height / 3;
+            sup.translate(operandBox.width + SPACE, offset);
+            offset = maxScriptHeight;
+            operand.translate(0, offset);
+            offset += operandBox.height - maxScriptHeight * 2;
+            sub.translate(operandBox.width + SPACE, offset);
         }
     });
 });
@@ -4880,6 +4859,7 @@ define("signgroup", [ "kity" ], function(require, exports, module) {
             IntegrationExpression: require( "expression/compound-exp/integration" ),
             MultiplicationExpression: require( "expression/compound-exp/binary-exp/multiplication" ),
             RadicalExpression: require( "expression/compound-exp/binary-exp/radical" ),
+            ScriptExpression: require( "expression/compound-exp/script" ),
             SuperscriptExpression: require( "expression/compound-exp/binary-exp/superscript" ),
             SubscriptExpression: require( "expression/compound-exp/binary-exp/subscript" ),
             SubtractionExpression: require( "expression/compound-exp/binary-exp/subtraction" ),
