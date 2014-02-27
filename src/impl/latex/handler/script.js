@@ -9,7 +9,7 @@ define( function ( require, exports, module ) {
 
         var script = unprocessedUnits.shift() || null,
             // 底数
-            base = processedUnits.shift() || null;
+            base = processedUnits.pop() || null;
 
         if ( base && typeof base === "object" ) {
 

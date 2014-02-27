@@ -127,13 +127,6 @@ define( function ( require, exports, module ) {
 
             return generate( units );
 
-        },
-
-        // 重新组合语法单元， 但此时的语法单元有可能是经过解析过的对象集合
-        recombined: function ( units ) {
-
-            return recombinedTree( this, units );
-
         }
 
     } ) );
@@ -163,7 +156,8 @@ define( function ( require, exports, module ) {
 
         }
 
-        return combinationTree( sequenceTree );
+
+        return combinationTree( preCombinationTree( sequenceTree ) );
 
     }
 
@@ -215,7 +209,11 @@ define( function ( require, exports, module ) {
 
             struct = sequenceTree.shift();
 
-            if ( typeof struct === "string" ) {
+            if ( Utils.isArray( struct ) ) {
+
+                processedResult.push( combinationTree( struct ) );
+
+            } else if ( typeof struct === "string" ) {
 
                 processedResult.push( struct );
 
@@ -246,64 +244,23 @@ define( function ( require, exports, module ) {
     }
 
     /**
-     * 行为类似于combinationTree，但是不再进行递归处理
-     * @param units 需要重组的单元集合
+     * 组合前的结构预处理
+     * @param sequenceStruct 顺序存储的结构
+     * @return sequenceStruct 被处理过后的结构
      */
-    function recombinedTree ( parser, units ) {
+    function preCombinationTree ( sequenceStruct ) {
 
-        // 处理文本节点
-        units = mergeText( units );
+        for ( var key in OP ) {
 
-        units = processOperator( units );
+            if ( OP[ key ] && OP[ key ].preStructFn && OP.hasOwnProperty( key ) ) {
 
-        return mergeAllUnits( units );
-
-    }
-
-
-    /**
-     * 处理操作符， 使得语法单元中的操作数根据操作符的规则被组合在一起
-     * @return {Array} 返回已经处理过数据操作符后的语法单元数组
-     */
-    function processOperator ( units ) {
-
-        var unit = null,
-            handler = null,
-        // 已处理过的结果集
-            processedResult = [];
-
-        // 顺序组合序列存储的树里的语法单元
-        while ( unit = units.shift() ) {
-
-            if ( typeof unit === "string" ) {
-
-                processedResult.push( unit );
-
-            } else {
-
-                // 已处理过的操作对象， 直接略过
-                if ( unit.operand && unit.operand.length > 0 ) {
-
-                    processedResult.push( unit );
-
-                    // 未处理过的语法单元
-                } else {
-
-                    // handler代表函数对应的处理器
-                    handler = OP[ unit.originOperator ].handler;
-                    // handler代表处理过后的结果集
-                    handler = handler.call( unit, unit.operator, units, processedResult );
-                    // 验证操作符处理后的结果， 如果验证失败， 会抛出异常
-                    validOperatorResult( handler );
-                    processedResult.push( handler );
-
-                }
+                sequenceStruct = OP[ key ].preStructFn( sequenceStruct );
 
             }
 
         }
 
-        return processedResult;
+        return sequenceStruct;
 
     }
 
@@ -360,41 +317,6 @@ define( function ( require, exports, module ) {
 
         units.unshift( 'combination' );
         return OP[ 'combination' ].handler.apply( null, units );
-
-    }
-
-    function validOperatorResult ( result ) {
-
-        var operands = result.operand,
-            curOperand = null;
-
-        for ( var i = 0, len = operands.length; i < len; i++ ) {
-
-            curOperand = operands[ i ];
-
-            if ( curOperand && typeof curOperand === 'object' ) {
-
-                // 操作符对象还未被处理过
-                if ( curOperand.hasOwnProperty( "originOperator" ) ) {
-
-                    if ( curOperand.empty === false ) {
-                        throw new Error( "operator error: " + curOperand.operator + " Untreated" );
-                    } else {
-                        // 处理操作符
-                        operands[ i ] = OP[ curOperand.originOperator ].handler.call( curOperand, curOperand.operator, [], [] );
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-    function isArray ( obj ) {
-
-        return Object.prototype.toString.call( obj ) === '[object Array]';
 
     }
 

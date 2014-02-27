@@ -5,7 +5,9 @@
 define( function ( require, exports, module ) {
 
     var binaryHandler = require( "impl/latex/handler/binary" ),
-        scriptHandler = require( "impl/latex/handler/script" );
+        scriptHandler = require( "impl/latex/handler/script" ),
+        // 上下标结构预处理
+        scriptPreStructFn = require( "impl/latex/pre-struct/script" );
 
     return {
 
@@ -51,10 +53,12 @@ define( function ( require, exports, module ) {
         },
         "^": {
             name: "superscript",
+            preStructFn: scriptPreStructFn,
             handler: scriptHandler
         },
         "_": {
             name: "subscript",
+            preStructFn: scriptPreStructFn,
             handler: scriptHandler
         },
         "frac": {
@@ -72,6 +76,7 @@ define( function ( require, exports, module ) {
         },
         "int": {
             name: "integration",
+            pre: require( "impl/latex/pre/int" ),
             handler: require( "impl/latex/handler/integration" )
         },
         "func": {
