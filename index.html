@@ -51,9 +51,10 @@
 
             document.getElementById( "parseBtn" ).onclick = function () {
 
-                var value = document.getElementById( "latexInput" ).value;
+                var value = document.getElementById( "latexInput" ).value,
+                    parseResult = latexParser.parse( value );
 
-                assembly.regenerateBy( latexParser.parse( value ) );
+                assembly.regenerateBy( parseResult );
 
             };
 
@@ -71,7 +72,9 @@
     <div class="main">
         <div id="editor">
             <!--<textarea id="latexInput">\int^{n}_{n=20}{n*3}</textarea>-->
-            <textarea id="latexInput">\lim_{x\to\infty}{a-b}</textarea>
+            <!--<textarea id="latexInput">\lim_{x\to\infty}{a-b}</textarea>-->
+            <!--<textarea id="latexInput">a+{b-c}</textarea>-->
+            <textarea id="latexInput">\int{\sum ab} a</textarea>
         </div>
         <div class="split">
             <button id="parseBtn" type="button">转换</button>

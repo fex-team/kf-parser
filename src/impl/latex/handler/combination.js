@@ -8,10 +8,6 @@ define( function ( require, exports, module ) {
 
         var args = [].slice.call( arguments, 1 );
 
-        if ( args.length === 1 ) {
-            return args[ 0 ];
-        }
-
         return {
             operator: operatorName,
             operand: args

@@ -5,10 +5,8 @@
 define( function ( require, exports, module ) {
 
     var Parser = require( "parser" ).Parser,
-        MAPPING = require( "impl/latex/fun"),
-        OP = MAPPING.operator,
-        DEFAULT_PRE_HANDLER = require( "impl/latex/pre/default" ),
-        Checker = require( "impl/latex/checker" );
+        OP = require( "impl/latex/define/operator" ),
+        Utils = require( "impl/latex/base/utils" );
 
     // data
     var leftChar = "\ufff8",
@@ -18,7 +16,7 @@ define( function ( require, exports, module ) {
 
         parse: function ( data ) {
 
-            var units = this.split( this.pretreatment( data ) );
+            var units = this.split( this.format( data ) );
 
             units = this.restructuring( units );
 
@@ -26,30 +24,27 @@ define( function ( require, exports, module ) {
 
         },
 
-        // 预处理表达式
-        pretreatment: function ( data ) {
-
-            var preFn = null;
+        // 格式化输入数据
+        format: function ( input ) {
 
             // 清理多余的空格
-            data = clearEmpty( data );
+            input = clearEmpty( input );
 
             // 处理输入的“{”和“}”
-            data = data.replace( /\\{/gi, leftChar ).replace( /\\}/gi, rightChar );
+            input = input.replace( /\\{/gi, leftChar ).replace( /\\}/gi, rightChar );
 
-            // 调用各个操作符来进行预处理
-            for ( var op in OP ) {
+            // 预处理
+            for ( var key in OP ) {
 
-                preFn = OP[ op ].pre;
+                if ( OP[ key ] && OP[ key ].pre && OP.hasOwnProperty( key ) ) {
 
-                if ( preFn ) {
-                    data = preFn( data );
+                    input = OP[ key ].pre( input );
+
                 }
 
             }
 
-            // 交由默认预处理器处理
-            return DEFAULT_PRE_HANDLER( data );
+            return input;
 
         },
 
@@ -130,9 +125,7 @@ define( function ( require, exports, module ) {
          */
         generateTree: function ( units ) {
 
-            var sequenceTree = generate( units );
-
-            return combinationTree( this, sequenceTree );
+            return generate( units );
 
         },
 
@@ -146,31 +139,31 @@ define( function ( require, exports, module ) {
     } ) );
 
     /**
-     * 生成解析树的内部表示
+     * 生成解析树
      */
     function generate ( units ) {
 
         // 顺序存储的树结构
         var sequenceTree = [];
 
+        // 逆序递归处理每一个语法单元
         for ( var i = 0, currentUnit, len = units.length; i < len; i++ ) {
 
             currentUnit = units[ i ];
 
-            if ( typeof currentUnit === "string" ) {
-
-                sequenceTree.push( parseStruct( currentUnit ) );
-
-            } else {
-                // group
+            if ( Utils.isArray( currentUnit ) ) {
 
                 sequenceTree.push( generate( currentUnit ) );
+
+            } else {
+
+                sequenceTree.push( parseStruct( currentUnit ) );
 
             }
 
         }
 
-        return sequenceTree;
+        return combinationTree( sequenceTree );
 
     }
 
@@ -179,44 +172,31 @@ define( function ( require, exports, module ) {
      */
     function parseStruct ( str ) {
 
-        var operator = getFunctionName( str );
+        var type = Utils.getLatexType( str ),
+            FUNC_HANDLER = Utils.getFunctionHandler();
 
-        if ( operator === null ) {
+        switch ( type ) {
 
-            if ( Checker.isFunc( str ) ) {
+            case "operator":
+
                 return {
-                    originOperator: "func",
-                    operator: "Function",
-                    params: str.replace( /\\/gi, "" ),
-                    operand: []
+                    operator: Utils.getOperatorName( str ),
+                    handler: Utils.getOperatorHandler( str )
                 };
-            }
 
-            return transformSpecialCharacters( str );
+            case "function":
 
-        } else {
+                return {
+                    operator: "Function",
+                    handler: FUNC_HANDLER,
+                    params: str.replace( /^\\/, "" )
+                };
 
-            return {
-                originOperator: str.replace( "\\", "" ),
-                operator: operator,
-                operand: []
-            };
+            default:
+                // text
+                return transformSpecialCharacters( str );
 
         }
-
-    }
-
-    /**
-     * 根据给定的字符串获取其所对应的函数名称， 如果该字符串不能代表一个函数名称， 则返回null
-     * @param str 需要判断的字符串
-     */
-    function getFunctionName ( str ) {
-
-        str = str.length > 1 ? str.replace( "\\", "" ) : str;
-        // 对应的函数对象
-        str = OP[ str ];
-
-        return str ? str.name : null;
 
     }
 
@@ -224,34 +204,44 @@ define( function ( require, exports, module ) {
      * 把序列化存储的树结构进行整合， 生成最终的解析树
      * @param sequenceTree 序列化存储的树
      */
-    function combinationTree ( parser, sequenceTree ) {
+    function combinationTree ( sequenceTree ) {
 
         // 已处理过的结果集
         var processedResult = [],
             struct = null,
-            textResult = null;
+            max_count = 2000;
 
-        // 递归到最深的叶子节点上
-        for ( var i = 0, len = sequenceTree.length; i < len; i++ ) {
+        while ( sequenceTree.length && --max_count ) {
 
-            struct = sequenceTree[ i ];
+            struct = sequenceTree.shift();
 
-            if ( isArray( struct ) ) {
+            if ( typeof struct === "string" ) {
 
-                sequenceTree[ i ] = combinationTree( parser, struct );
+                processedResult.push( struct );
+
+            } else if ( struct.handler ) {
+                // 未处理操作符
+
+                processedResult.push( struct.handler.call( struct, processedResult, sequenceTree ) );
+
+            } else {
+
+                //已处理操作符
+                processedResult.push( struct );
 
             }
 
         }
 
-        // 顺序组合序列存储的树里的语法单元
-        processedResult = processOperator( sequenceTree );
+        if ( max_count === 0 ) {
+            throw new Error( 'call stack overflow' );
+        }
 
         // 合并文本单元
-        textResult = mergeText( processedResult );
+        processedResult = mergeText( processedResult );
 
         // 返回组合了文本单元和其他单元的树对象
-        return mergeAllUnits( textResult );
+        return mergeAllUnits( processedResult );
 
     }
 

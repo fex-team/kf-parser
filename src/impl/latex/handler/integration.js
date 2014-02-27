@@ -4,19 +4,15 @@
 
 define( function ( require, exports, module ) {
 
-    return function ( operatorName, unprocessedUnits, processedUnits ) {
+    var extractFn = require( "impl/latex/handler/lib/int-extract" );
 
-        var count = /\d+/.exec( unprocessedUnits.shift() ) || 1,   // 积分重数
-            sup = unprocessedUnits.shift(),
-            sub = unprocessedUnits.shift(),
-            exp = unprocessedUnits.shift();
+    return function ( processedUnits, unprocessedUnits ) {
+
+        var params = extractFn( unprocessedUnits );
 
         return {
-            operator: operatorName,
-            operand: [ exp, sup, sub ],
-            callFn: {
-                setType: [ count ]
-            }
+            operator: this.operator,
+            operand: [ params.exp, params.sup, params.sub ]
         };
 
     };

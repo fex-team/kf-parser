@@ -5,18 +5,13 @@
 define( function ( require, exports, module ) {
 
     // 处理函数接口
-    return function ( operatorName, unprocessedUnits ) {
+    return function ( processedUnits, unprocessedUnits ) {
 
-        var numerator = null,
-            denominator = null;
-
-        if ( unprocessedUnits.length ) {
-            numerator = unprocessedUnits.shift();
-            denominator = unprocessedUnits.shift();
-        }
+        var numerator = unprocessedUnits.shift() || null,
+            denominator = unprocessedUnits.shift() || null;
 
         return {
-            operator: operatorName,
+            operator: this.operator,
             operand: [ numerator, denominator ]
         };
 

@@ -4,15 +4,15 @@
 
 define( function ( require, exports, module ) {
 
-    return function ( operatorName, unprocessedUnits, processedUnits ) {
+    var extractFn = require( "impl/latex/handler/lib/int-extract" );
 
-        var sup = unprocessedUnits.shift(),
-            sub = unprocessedUnits.shift(),
-            exp = unprocessedUnits.shift();
+    return function ( processedUnits, unprocessedUnits ) {
+
+        var params = extractFn( unprocessedUnits );
 
         return {
-            operator: operatorName,
-            operand: [ exp, sup, sub ]
+            operator: this.operator,
+            operand: [ params.exp, params.sup, params.sub ]
         };
 
     };

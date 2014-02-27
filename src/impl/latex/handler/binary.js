@@ -5,22 +5,21 @@
 define( function ( require, exports, module ) {
 
     // 处理函数接口
-    return function ( operatorName, unprocessedUnits, processedUnits ) {
+    return function ( processedUnits, unprocessedUnits ) {
 
-        var prev = null,
-            back = null;
+        var first = processedUnits.pop() || null,
+            second = null;
 
-        if ( processedUnits.length ) {
-            prev = processedUnits.pop();
-        }
-
-        if ( unprocessedUnits.length ) {
-            back = unprocessedUnits.shift();
+        // 操作符的后置数据不是一个简单数据（字符串类型），则不取出操作数，直接置空
+        if ( typeof unprocessedUnits[ unprocessedUnits.length - 1 ] === "object" ) {
+            second = null;
+        } else {
+            second = unprocessedUnits.shift() || null;
         }
 
         return {
-            operator: operatorName,
-            operand: [ prev, back ]
+            operator: this.operator,
+            operand: [ first, second ]
         };
 
     };

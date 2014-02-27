@@ -5,23 +5,14 @@
 define( function ( require, exports, module ) {
 
     // 处理函数接口
-    return function ( operatorName, unprocessedUnits, processedUnits ) {
+    return function ( processedUnits, unprocessedUnits ) {
 
-        // 指数
-        var exponent = null,
+        var exponent = unprocessedUnits.shift() || null,
             // 被开方数
-            radicand = null;
-
-
-        exponent = unprocessedUnits.shift();
-        radicand = unprocessedUnits.shift();
-
-        if ( exponent === undefined || radicand === undefined ) {
-            throw new Error( 'parse error: "\\sqrt", missing radicand' );
-        }
+            radicand = unprocessedUnits.shift() || null;
 
         return {
-            operator: operatorName,
+            operator: this.operator,
             operand: [ radicand, exponent ]
         };
 
