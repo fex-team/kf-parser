@@ -6,8 +6,7 @@ define( function ( require, exports, module ) {
 
     return function ( units ) {
 
-        var count = units.shift(),  // 积分重数
-            sup = units.shift() || null,
+        var sup = units.shift() || null,
             sub = null,
             exp = null;
 
@@ -18,7 +17,7 @@ define( function ( require, exports, module ) {
                 sup = null;
             } else {
 
-                if ( sup.operator === "Superscript" ) {
+                if ( sup.name === "superscript" ) {
                     sup = units.shift() || null;
 
                     if ( sup ) {
@@ -27,7 +26,7 @@ define( function ( require, exports, module ) {
 
                         if ( sub ) {
 
-                            if ( sub.operator === "Subscript" ) {
+                            if ( sub.name === "subscript" ) {
                                 sub = units.shift() || null;
                                 exp = units.shift() || null;
                             } else {
@@ -39,7 +38,7 @@ define( function ( require, exports, module ) {
 
                     }
 
-                } else if ( sup.operator === "Subscript" ) {
+                } else if ( sup.name === "subscript" ) {
 
                     sub = units.shift() || null;
 
@@ -49,7 +48,7 @@ define( function ( require, exports, module ) {
 
                         if ( sup ) {
 
-                            if ( sup.operator === "Superscript" ) {
+                            if ( sup.name === "superscript" ) {
                                 sup = units.shift() || null;
                                 exp = units.shift() || null;
                             } else {
@@ -73,8 +72,7 @@ define( function ( require, exports, module ) {
         return {
             sub: sub,
             sup: sup,
-            exp: exp,
-            count: count
+            exp: exp
         };
 
     };

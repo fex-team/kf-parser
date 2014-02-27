@@ -5,15 +5,20 @@
 define( function ( require, exports, module ) {
 
     // 处理函数接口
-    return function ( processedUnits, unprocessedUnits ) {
+    return function ( info, processedStack, unprocessedStack ) {
 
-        var numerator = unprocessedUnits.shift() || null,
-            denominator = unprocessedUnits.shift() || null;
+        var numerator = unprocessedStack.shift(),   // 分子
+            denominator = unprocessedStack.shift(); // 分母
 
-        return {
-            operator: this.operator,
-            operand: [ numerator, denominator ]
-        };
+        if ( !numerator || !denominator ) {
+            throw new Error( "Frac: Syntax Error" );
+        }
+
+        info.operand = [ numerator, denominator ];
+
+        delete info.handler;
+
+        return info;
 
     };
 

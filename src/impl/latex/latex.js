@@ -6,6 +6,7 @@ define( function ( require, exports, module ) {
 
     var Parser = require( "parser" ).Parser,
         LatexUtils = require( "impl/latex/base/latex-utils" ),
+        PRE_HANDLER =  require( "impl/latex/define/pre" ),
         Utils = require( "impl/latex/base/utils" );
 
     // data
@@ -34,6 +35,15 @@ define( function ( require, exports, module ) {
 
             // 处理输入的“{”和“}”
             input = input.replace( /\\{/gi, leftChar ).replace( /\\}/gi, rightChar );
+
+            // 预处理器处理
+            for ( var key in PRE_HANDLER ) {
+
+                if ( PRE_HANDLER.hasOwnProperty( key ) ) {
+                    input = PRE_HANDLER[ key ]( input );
+                }
+
+            }
 
             return input;
 
@@ -74,13 +84,23 @@ define( function ( require, exports, module ) {
          */
         generateTree: function ( units ) {
 
-            units = LatexUtils.toRPNExpression( units );
+            var tree = [],
+                currentUnit = null;
 
-            var t = LatexUtils.generateTree( units );
+            // 递归处理
+            while ( currentUnit = units.shift() ) {
 
-            debugger;
+                if ( Utils.isArray( currentUnit ) ) {
+                    tree.push( this.generateTree( currentUnit ) );
+                } else {
+                    tree.push( currentUnit );
+                }
 
-            return t;
+            }
+
+            tree = LatexUtils.toRPNExpression( tree );
+
+            return LatexUtils.generateTree( tree );
 
         },
 

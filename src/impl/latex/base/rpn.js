@@ -8,12 +8,14 @@ define( function ( require ) {
 
     return function ( units ) {
 
-        var opStack = [],
-            signStack = [],
+        var signStack = [],
 
             TYPE = require( "impl/latex/define/type"),
 
             currentUnit = null;
+
+        // 先处理函数
+        units = processFunction( units );
 
         while ( currentUnit = units.shift() ) {
 
@@ -21,85 +23,39 @@ define( function ( require ) {
 
                 signStack.push( arguments.callee( currentUnit ) );
                 continue;
-            }
-
-            if ( typeof currentUnit === "object" && currentUnit.type === TYPE.FN ) {
-
-debugger;
-
-            } else {
-
-                signStack.push( currentUnit );
 
             }
+
+            signStack.push( currentUnit );
 
         }
-
 
         return signStack;
 
     };
 
     /**
-     * 根据当前操作符和栈的情况，对操作符进行栈操作
-     * @param op 当前操作符
-     * @param opStack 当前操作符栈
-     * @param signStack 当前符号栈
+     * “latex函数”处理器
+     * @param units 单元组
+     * @returns {Array} 处理过后的单元组
      */
-    function processOperator ( op, opStack, signStack ) {
+    function processFunction ( units ) {
 
-        var tmp = null,
-            tmpStack = null,
-            hasError = true;
+        var processed = [],
+            currentUnit = null;
 
-        // 空栈或者左括号， 直接入栈
-        if ( opStack.length === 0 || op.name === "left-brackets" ) {
-            opStack.push( op );
-            return;
-        }
+        while ( currentUnit = units.shift() ) {
 
-        // 右括号， 出栈
-        if ( op.name === "right-brackets" ) {
-
-            tmpStack = [];
-
-            while ( tmp = opStack.pop() ) {
-
-                if ( tmp.name === "left-brackets" ) {
-                    hasError = false;
-                    break;
-                }
-
-                tmpStack.push( tmp );
-
-            }
-
-            if ( hasError ) {
-                throw new Error( "RPN: Unclosed parentheses" );
-            }
-
-            signStack.push( tmpStack );
-            return;
-
-        }
-
-        while ( tmp = opStack.pop() ) {
-
-            if ( tmp.name === "left-brackets" ) {
-                break;
-            }
-
-            // 栈顶操作符优先级较高
-            if ( !( tmp.priority < op.priority ) ) {
-                signStack.push( tmp );
+            if ( typeof currentUnit === "object" && currentUnit.sign === false ) {
+                // 预先处理不可作为独立符号的函数
+                processed.push( currentUnit.handler( currentUnit, processed, units ) );
             } else {
-                opStack.push( tmp );
-                break;
+                processed.push( currentUnit );
             }
 
         }
 
-        opStack.push( op );
+        return processed;
 
     }
 

@@ -4,24 +4,11 @@
 
 define( function ( require, exports, module ) {
 
-    var binaryHandler = require( "impl/latex/handler/binary" ),
-        scriptHandler = require( "impl/latex/handler/script" ),
+    var scriptHandler = require( "impl/latex/handler/script" ),
         TYPE = require( "impl/latex/define/type" );
 
     return {
 
-        "{": {
-            name: "left-brackets",
-            type: TYPE.OP,
-            handler: true,
-            priority: 99
-        },
-        "}": {
-            name: "right-brackets",
-            type: TYPE.OP,
-            handler: true,
-            priority: 99
-        },
         "+": {
             name: "addition"
         },
@@ -64,12 +51,14 @@ define( function ( require, exports, module ) {
         "frac": {
             name: "fraction",
             type: TYPE.FN,
+            sign: false,
             handler: require( "impl/latex/handler/fraction" )
         },
         "sqrt": {
             name: "radical",
             type: TYPE.FN,
-            handler: require( "impl/latex/handler/radical" )
+            sign: false,
+            handler: require( "impl/latex/handler/sqrt" )
         },
         "sum": {
             name: "summation",

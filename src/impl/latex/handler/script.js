@@ -5,9 +5,10 @@
 define( function ( require, exports, module ) {
 
     // 处理函数接口
-    return function ( info, base, script ) {
+    return function ( info, processedStack, unprocessedStack ) {
 
-        base = base || null;
+        var base = processedStack.pop(),
+            script = unprocessedStack.shift() || null;
 
         if ( !script ) {
             throw new Error( "Missing script" );
@@ -36,6 +37,9 @@ define( function ( require, exports, module ) {
         }
 
         info.operand = [ base, script ];
+
+        // 删除处理器
+        delete info.handler;
 
         return info;
 

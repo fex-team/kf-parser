@@ -6,14 +6,15 @@ define( function ( require, exports, module ) {
 
     var extractFn = require( "impl/latex/handler/lib/int-extract" );
 
-    return function ( processedUnits, unprocessedUnits ) {
+    return function ( info, processedStack, unprocessedStack ) {
 
-        var params = extractFn( unprocessedUnits );
+        var params = extractFn( unprocessedStack );
 
-        return {
-            operator: this.operator,
-            operand: [ params.exp, params.sup, params.sub ]
-        };
+        info.operand = [ params.exp, params.sup, params.sub ];
+
+        delete info.handler;
+
+        return info;
 
     };
 

@@ -11,6 +11,7 @@ define( function ( require ) {
     return function ( units ) {
 
         var currentUnit = null,
+            nextUnit = null,
             tree = [];
 
         for ( var i = 0 , len = units.length; i < len; i++ ) {
@@ -25,7 +26,8 @@ define( function ( require ) {
 
             if ( typeof currentUnit === "object" && currentUnit.handler ) {
 
-                tree.push( currentUnit.handler( currentUnit, tree.pop(), units.shift() ) );
+                // 后操作数
+                tree.push( currentUnit.handler( currentUnit, tree, units ) );
 
             } else {
 
