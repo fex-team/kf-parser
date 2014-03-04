@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            width: 1000px;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        #editor {
+            width: 100%;
+            height: 200px;
+        }
+
+        .split {
+            padding: 10px 0;
+        }
+
+        #editor textarea {
+            width: 100%;
+            height: 100%;
+            resize: none;
+        }
+    </style>
+    <script src="dev-lib/kitygraph.all.js"></script>
+    <script src="dev-lib/kity-formula.all.js"></script>
+    <script src="dev-lib/sea-debug.js"></script>
+    <script>
+        seajs.config( {
+            base: "./src"
+        } );
+
+        define( "start", function ( require, exports, module ) {
+
+            var Parser = require( "parser" ).Parser,
+                Assembly = require( "assembly" ),
+                assembly = Assembly.use( document.getElementById( "container" ) );
+
+            require( 'impl/latex/latex' );
+
+            var latexParser = Parser.use( "latex" );
+
+            document.getElementById( "parseBtn" ).onclick = function () {
+
+                var value = document.getElementById( "latexInput" ).value,
+                    parseResult = latexParser.parse( value );
+
+                assembly.regenerateBy( parseResult );
+
+            };
+
+        } );
+
+        window.onload = function () {
+
+            seajs.use( 'start' );
+
+        };
+
+    </script>
+</head>
+<body>
+    <div class="main">
+        <div id="editor">
+            <!--<textarea id="latexInput">\int^{n}_{n=20}{n*3}</textarea>-->
+            <!--<textarea id="latexInput">\lim_{x\to\infty}{a-b}</textarea>-->
+            <!--<textarea id="latexInput">a+{b-c}</textarea>-->
+            <!--<textarea id="latexInput">\int{\sum ab} a</textarea>-->
+            <textarea id="latexInput">a^2+b^2=c^2</textarea>
+        </div>
+        <div class="split">
+            <button id="parseBtn" type="button">转换</button>
+        </div>
+        <div id="container"></div>
+    </div>
+</body>
+</html>

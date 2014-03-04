@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="dev-lib/kitygraph.all.js"></script>
+    <script src="dev-lib/kity-formula.all.js"></script>
+    <script src="dev-lib/sea-debug.js"></script>
+    <script>
+        seajs.config( {
+            base: "./src"
+        } );
+
+        define( "start", function ( require, exports, module ) {
+
+            var Parser = require( "parser" ).Parser,
+                Assembly = require( "assembly" );
+                
+            require( 'impl/latex/latex' );
+
+            var latexParser = Parser.use( "latex" );
+//            Parser.config( "name", "latex" );
+//            Parser.config( {
+//                sex: "nan2",
+//                name: "latex2"
+//            } );
+
+            var result = latexParser.parse( "f(x)=\\sum_{a-b}{\\frac ab}" );
+
+            Assembly.use( document.body ).generateBy( result );
+
+        } );
+
+        window.onload = function () {
+
+            seajs.use( 'start' );
+
+        };
+
+    </script>
+    <script>
+
+//        {
+//
+//            config: {
+//                 fontSize: 14
+//          },
+//
+//            tree: {
+//                operand: [  ],
+//                operator: "addition"
+//            }
+//
+//        }
+
+//        // 全局配置
+//        Parser.config( {
+//            "fontSize": 26
+//        } );
+
+
+        // 当前使用的parser类型
+//        var latexParser = Parser.use( 'latex' );
+//
+//
+//        // 设置解析出来的语法树配置
+////        latexParser.config( {
+////            fontSize: 14
+////        } );
+//
+////        // 设置当前解析器的配置
+////        // 需要增加一种用户切入控制的方式
+////        latexParser.set( {
+////            "UpperCase": true
+////        } );
+//
+//        var parsedTree = latexParser.parse( "\\frac{b}{a}+\\frac{1}{c}}" );
+//
+//        Assembly.use( "container" ).generateBy( parsedTree );
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
