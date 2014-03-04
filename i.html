@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>逻辑表达式</title>
+    <meta charset="utf-8">
+    <script src="dev-lib/kitygraph.all.js"></script>
+    <script src="dev-lib/kity-formula.all.js"></script>
+    <script src="dev-lib/sea-debug.js"></script>
+    <script>
+        seajs.config({
+            base: "./src"
+        });
+
+        define("start", function (require, exports, module) {
+
+            var Parser = require("parser").Parser,
+                    Assembly = require("assembly");
+
+            require('impl/latex/latex');
+
+            var exp = document.getElementsByClassName("latex-exp");
+
+            var latexParser = Parser.use("latex"),
+                    latexStr = "";
+
+            for (var i = 0, len = exp.length; i < len; i++) {
+
+                latexStr = exp[ i ].innerText;
+                exp[ i ].innerText = "";
+
+                Assembly.use(exp[ i ]).generateBy(latexParser.parse(latexStr));
+
+            }
+
+        });
+
+        window.onload = function () {
+
+            seajs.use('start');
+
+        };
+
+    </script>
+    <style type="text/css">
+        span {
+            display: inline-block;
+            vertical-align:middle
+        }
+    </style>
+</head>
+<body style="font-size: 16px;">
+<p>考虑平方根函数<span class="latex-exp">x\to\sqrt x</span>，其中<span
+        class="latex-exp">x\in[0'1]</span>。在区间<span class="latex-exp">[0'1]</span>上，函数<span class="latex-exp">f</span>“下方”的面积是多少？
+<!--<p>-->
+    <!--你好为什么呢<span class="na"></span>哈哈-->
+</p>
+</body>
+</html>

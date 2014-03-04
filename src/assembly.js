@@ -6,8 +6,8 @@ define( function ( require, exports, module ) {
 
     var CONSTRUCT_MAPPING = {};
 
-    function Assembly ( container ) {
-        this.formula = new kf.Formula( container );
+    function Assembly ( container, config ) {
+        this.formula = new kf.Formula( container, config );
     }
 
     Assembly.prototype.generateBy = function ( data ) {
@@ -94,8 +94,8 @@ define( function ( require, exports, module ) {
     }
 
     return {
-        use: function ( container ) {
-            return new Assembly( container );
+        use: function ( container, config) {
+            return new Assembly( container, config );
         }
     };
 

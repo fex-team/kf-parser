@@ -5,6 +5,7 @@
 define( function ( require, exports, module ) {
 
     var scriptHandler = require( "impl/latex/handler/script" ),
+        funcHandler = require( "impl/latex/handler/func" ),
         TYPE = require( "impl/latex/define/type" );
 
     return {
@@ -24,8 +25,26 @@ define( function ( require, exports, module ) {
         "cdot": {
             name: "dot"
         },
-        "=": {
-            name: "eq"
+        "cdots": {
+            name: "dots"
+        },
+        "ldots": {
+            name: "dots",
+            callFn: {
+                setType: [ "ldots" ]
+            }
+        },
+        "vdots": {
+            name: "dots",
+            callFn: {
+                setType: [ "vdots" ]
+            }
+        },
+        "ddots": {
+            name: "dots",
+            callFn: {
+                setType: [ "ddots" ]
+            }
         },
         "*": {
             name: "asterisk"
@@ -36,6 +55,100 @@ define( function ( require, exports, module ) {
         "mp": {
             name: "minus-plus"
         },
+
+        // 关系函数， 比较
+        "<": {
+            name: "lt"
+        },
+        ">": {
+            name: "gt"
+        },
+        "leq": {
+            name: "leq"
+        },
+        "geq": {
+            name: "geq"
+        },
+        "sim": {
+            name: "sim"
+        },
+        "simeq": {
+            name: "simeq"
+        },
+        "approx": {
+            name: "approx"
+        },
+        "li": {
+            name: "li"
+        },
+        "ge": {
+            name: "ge"
+        },
+        "=": {
+            name: "eq"
+        },
+        "equiv": {
+            name: "equiv"
+        },
+
+        // 关系函数， 集合
+        "cap": {
+            name: "cap"
+        },
+        "cup": {
+            name: "cup"
+        },
+        "subset": {
+            name: "subset"
+        },
+        "supset": {
+            name: "supset"
+        },
+        "subseteq": {
+            name: "subseteq"
+        },
+        "supseteq": {
+            name: "supseteq"
+        },
+        "in": {
+            name: "in"
+        },
+        "ni": {
+            name: "ni"
+        },
+        "sqsupset": {
+            name: "sqsupset"
+        },
+        "sqsubset": {
+            name: "sqsubset"
+        },
+        "sqsupseteq": {
+            name: "sqsupseteq"
+        },
+        "sqsubseteq": {
+            name: "sqsubseteq"
+        },
+        "sqcap": {
+            name: "sqcap"
+        },
+        "sqcup": {
+            name: "sqcup"
+        },
+
+        // 关系函数， 逻辑
+        "wedge": {
+            name: "wedge"
+        },
+        "vee": {
+            name: "vee"
+        },
+        "mid": {
+            name: "mid"
+        },
+
+        // 关系函数， 否定
+        // TODO 需补充
+
         "^": {
             name: "superscript",
             type: TYPE.OP,
@@ -69,6 +182,12 @@ define( function ( require, exports, module ) {
             name: "integration",
             type: TYPE.FN,
             handler: require( "impl/latex/handler/integration" )
+        },
+
+        "brackets": {
+            name: "brackets",
+            type: "TYPE.FN",
+            handler: require( "impl/latex/handler/brackets" )
         }
 
     };

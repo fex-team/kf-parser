@@ -11,7 +11,10 @@ define( function ( require, exports, module ) {
 
     // data
     var leftChar = "\ufff8",
-        rightChar = "\ufffc";
+        rightChar = "\ufffc",
+        clearCharPattern = new RegExp( leftChar+"|"+rightChar, "g"),
+        leftCharPattern = new RegExp( leftChar, "g" ),
+        rightCharPattern = new RegExp( rightChar, "g" );
 
     Parser.register( "latex", Parser.implement( {
 
@@ -34,7 +37,7 @@ define( function ( require, exports, module ) {
             input = clearEmpty( input );
 
             // 处理输入的“{”和“}”
-            input = input.replace( /\\{/gi, leftChar ).replace( /\\}/gi, rightChar );
+            input = input.replace( clearCharPattern, "" ).replace( /\\{/gi, leftChar ).replace( /\\}/gi, rightChar );
 
             // 预处理器处理
             for ( var key in PRE_HANDLER ) {
@@ -52,13 +55,11 @@ define( function ( require, exports, module ) {
         split: function ( data ) {
 
             var units = [],
-                replacePattern = new RegExp( leftChar+"|"+rightChar, "g" ),
                 pattern = /(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
                 emptyPattern = /^\s+|\s+$/g,
                 match = null;
 
-            data = data.replace( emptyPattern, "" )
-                       .replace( replacePattern, "" );
+            data = data.replace( emptyPattern, "" );
 
             while ( match = pattern.exec( data ) ) {
 
@@ -107,8 +108,9 @@ define( function ( require, exports, module ) {
         parseToGroup: function ( units ) {
 
             var group = [],
-                groupPointer = group,
-                groupCount = 0;
+                groupStack = [ group ],
+                groupCount = 0,
+                bracketsCount = 0;
 
             for ( var i = 0, len = units.length; i < len; i++ ) {
 
@@ -116,16 +118,38 @@ define( function ( require, exports, module ) {
 
                     case "{":
                         groupCount++;
+                        groupStack.push( group );
                         group.push( [] );
                         group = group[ group.length - 1 ];
                         break;
+
                     case "}":
                         groupCount--;
-                        group = groupPointer;
+                        group = groupStack.pop();
+                        break;
+
+                    // left-right分组
+                    case "\\left":
+                        bracketsCount++;
+                        groupStack.push( group );
+                        group.push( [] );
+                        group = group[ group.length - 1 ];
+                        group.type = "brackets";
+                        // 读取左括号
+                        i++;
+                        group.leftBrackets = units[ i ];
+                        break;
+
+                    case "\\right":
+                        bracketsCount--;
+                        // 读取右括号
+                        i++;
+                        group.rightBrackets = units[ i ];
+                        group = groupStack.pop();
                         break;
 
                     default:
-                        group.push( units[i] );
+                        group.push( units[i].replace( leftCharPattern, "{" ).replace( rightCharPattern, "}" ) );
                         break;
 
                 }
@@ -136,7 +160,11 @@ define( function ( require, exports, module ) {
                 throw new Error( "Group Error!" );
             }
 
-            return groupPointer;
+            if ( bracketsCount !== 0 ) {
+                throw new Error( "Brackets Error!" );
+            }
+
+            return groupStack[0];
 
         },
 
@@ -147,7 +175,18 @@ define( function ( require, exports, module ) {
             for ( var i = 0, len = units.length; i < len; i++ ) {
 
                 if ( Utils.isArray( units[ i ] ) ) {
-                    structs.push( this.parseToStruct( units[ i ] ) );
+
+                    if ( units[ i ].type === "brackets" ) {
+                        // 处理自动调整大小的括号组
+                        // 获取括号组定义
+                        structs.push( Utils.getBracketsDefine( units[ i ].leftBrackets, units[ i ].rightBrackets ) );
+                        // 处理内部表达式
+                        structs.push( this.parseToStruct( units[ i ] ) );
+                    } else {
+                        // 普通组
+                        structs.push( this.parseToStruct( units[ i ] ) );
+                    }
+
                 } else {
                     structs.push( parseStruct( units[ i ] ) );
                 }
@@ -166,8 +205,7 @@ define( function ( require, exports, module ) {
      */
     function parseStruct ( str ) {
 
-        var type = Utils.getLatexType( str ),
-            FUNC_HANDLER = Utils.getFunctionHandler();
+        var type = Utils.getLatexType( str );
 
         switch ( type ) {
 
@@ -177,11 +215,7 @@ define( function ( require, exports, module ) {
 
             case "function":
 
-                return {
-                    operator: "Function",
-                    handler: FUNC_HANDLER,
-                    params: str.replace( /^\\/, "" )
-                };
+                return Utils.getFuncDefine( str );
 
             default:
                 // text

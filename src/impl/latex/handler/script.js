@@ -22,7 +22,7 @@ define( function ( require, exports, module ) {
         if ( base.name === "subscript" ) {
 
             base.name = "script";
-            base.operand[ 2 ] = info.operand[ 1 ];
+            base.operand[ 2 ] = base.operand[ 1 ];
             base.operand[ 1 ] = script;
 
             return base;

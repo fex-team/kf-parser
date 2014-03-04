@@ -7,6 +7,7 @@ define( function ( require, exports, module ) {
     var Checker = require( "impl/latex/base/checker" ),
         OPERATOR_LIST = require( "impl/latex/define/operator" ),
         FUNCTION_LIST = require( "impl/latex/define/func" ),
+        FUNCTION_HANDLER = require( "impl/latex/handler/func" ),
         Utils = {
 
             // 根据输入的latex字符串， 检测出该字符串所对应的kf的类型
@@ -39,9 +40,21 @@ define( function ( require, exports, module ) {
 
             },
 
-            getFunctionHandler: function () {
+            getFuncDefine: function ( str ) {
 
-                return OPERATOR_LIST[ "func" ];
+                return {
+                    name: "function",
+                    params: str.replace( /^\\/, "" ),
+                    handler: FUNCTION_HANDLER
+                };
+
+            },
+
+            getBracketsDefine: function ( leftBrackets, rightBrackets ) {
+
+                return Utils.extend( {
+                    params: [ leftBrackets, rightBrackets ]
+                }, OPERATOR_LIST[ "brackets" ] );
 
             },
 

@@ -5,7 +5,7 @@ define( function ( require ) {
 
     return function ( input ) {
 
-        return input.replace( /\\sqrt\s*((?:\[[^]*\])?)/g, function ( match, exponent ) {
+        return input.replace( /\\sqrt\s*((?:\[[^\]]*\])?)/g, function ( match, exponent ) {
 
             return "\\sqrt{" + exponent.replace( /^\[|\]$/g, "" ) + "}";
 
