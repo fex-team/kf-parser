@@ -7,6 +7,9 @@ define( function ( require, exports, module ) {
     var Parser = require( "parser" ).Parser,
         LatexUtils = require( "impl/latex/base/latex-utils" ),
         PRE_HANDLER =  require( "impl/latex/define/pre" ),
+        serialization = require( "impl/latex/serialization" ),
+        OP_DEFINE = require( "impl/latex/define/operator" ),
+        REVERSE_DEFINE = require( "impl/latex/define/reverse" ),
         Utils = require( "impl/latex/base/utils" );
 
     // data
@@ -27,6 +30,58 @@ define( function ( require, exports, module ) {
             units = this.parseToStruct( units );
 
             return this.generateTree( units );
+
+        },
+
+        serialization: function ( tree ) {
+
+            return serialization( tree );
+
+        },
+
+        expand: function ( expandObj ) {
+
+            var parseObj = expandObj.parse,
+                formatKey = null,
+                preObj = expandObj.pre,
+                reverseObj = expandObj.reverse;
+
+            for ( var key in parseObj ) {
+
+                if ( !parseObj.hasOwnProperty( key ) ) {
+                    continue;
+                }
+
+                formatKey = key.replace( /\\/g, "" );
+
+                OP_DEFINE[ formatKey ] = parseObj[ key ];
+
+            }
+
+            for ( var key in reverseObj ) {
+
+                if ( !reverseObj.hasOwnProperty( key ) ) {
+                    continue;
+                }
+
+                REVERSE_DEFINE[ key.replace( /\\/g, "" ) ] = reverseObj[ key ];
+
+            }
+
+            // 预处理
+            if ( preObj ) {
+
+                for ( var key in preObj ) {
+
+                    if ( !preObj.hasOwnProperty( key ) ) {
+                        continue;
+                    }
+
+                    PRE_HANDLER[ key.replace( /\\/g, "" ) ] = preObj[ key ];
+
+                }
+
+            }
 
         },
 
@@ -132,19 +187,20 @@ define( function ( require, exports, module ) {
                     case "\\left":
                         bracketsCount++;
                         groupStack.push( group );
-                        group.push( [] );
-                        group = group[ group.length - 1 ];
+                        // 进入两层
+                        group.push( [ [] ] );
+                        group = group[ group.length - 1 ][ 0 ];
                         group.type = "brackets";
                         // 读取左括号
                         i++;
-                        group.leftBrackets = units[ i ];
+                        group.leftBrackets = units[i].replace( leftCharPattern, "{" ).replace( rightCharPattern, "}" );
                         break;
 
                     case "\\right":
                         bracketsCount--;
                         // 读取右括号
                         i++;
-                        group.rightBrackets = units[ i ];
+                        group.rightBrackets = units[i].replace( leftCharPattern, "{" ).replace( rightCharPattern, "}" );
                         group = groupStack.pop();
                         break;
 

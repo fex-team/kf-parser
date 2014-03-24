@@ -6,6 +6,10 @@ define( function ( require, exports, module ) {
 
     return function () {
 
+        if ( arguments[ 0 ].length === 0 ) {
+            return null;
+        }
+
         return {
             name: "combination",
             operand: arguments[ 0 ]

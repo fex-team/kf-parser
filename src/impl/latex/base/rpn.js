@@ -44,18 +44,20 @@ define( function ( require ) {
         var processed = [],
             currentUnit = null;
 
-        while ( currentUnit = units.shift() ) {
+        while ( ( currentUnit = units.pop() ) !== undefined ) {
 
-            if ( typeof currentUnit === "object" && currentUnit.sign === false ) {
+            if ( currentUnit && typeof currentUnit === "object" && currentUnit.sign === false ) {
                 // 预先处理不可作为独立符号的函数
-                processed.push( currentUnit.handler( currentUnit, processed, units ) );
+                var tt = currentUnit.handler( currentUnit, [], processed.reverse() );
+                processed.unshift( tt );
+                processed.reverse();
             } else {
                 processed.push( currentUnit );
             }
 
         }
 
-        return processed;
+        return processed.reverse();
 
     }
 

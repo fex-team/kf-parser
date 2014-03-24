@@ -10,156 +10,15 @@ define( function ( require, exports, module ) {
 
     return {
 
-        "+": {
-            name: "addition"
-        },
-        "-": {
-            name: "subtraction"
-        },
-        "times": {
-            name: "multiplication"
-        },
-        "div": {
-            name: "division"
-        },
-        "cdot": {
-            name: "dot"
-        },
-        "cdots": {
-            name: "dots"
-        },
-        "ldots": {
-            name: "dots",
-            callFn: {
-                setType: [ "ldots" ]
-            }
-        },
-        "vdots": {
-            name: "dots",
-            callFn: {
-                setType: [ "vdots" ]
-            }
-        },
-        "ddots": {
-            name: "dots",
-            callFn: {
-                setType: [ "ddots" ]
-            }
-        },
-        "*": {
-            name: "asterisk"
-        },
-        "pm": {
-            name: "plus-minus"
-        },
-        "mp": {
-            name: "minus-plus"
-        },
-
-        // 关系函数， 比较
-        "<": {
-            name: "lt"
-        },
-        ">": {
-            name: "gt"
-        },
-        "leq": {
-            name: "leq"
-        },
-        "geq": {
-            name: "geq"
-        },
-        "sim": {
-            name: "sim"
-        },
-        "simeq": {
-            name: "simeq"
-        },
-        "approx": {
-            name: "approx"
-        },
-        "li": {
-            name: "li"
-        },
-        "ge": {
-            name: "ge"
-        },
-        "=": {
-            name: "eq"
-        },
-        "equiv": {
-            name: "equiv"
-        },
-
-        // 关系函数， 集合
-        "cap": {
-            name: "cap"
-        },
-        "cup": {
-            name: "cup"
-        },
-        "subset": {
-            name: "subset"
-        },
-        "supset": {
-            name: "supset"
-        },
-        "subseteq": {
-            name: "subseteq"
-        },
-        "supseteq": {
-            name: "supseteq"
-        },
-        "in": {
-            name: "in"
-        },
-        "ni": {
-            name: "ni"
-        },
-        "sqsupset": {
-            name: "sqsupset"
-        },
-        "sqsubset": {
-            name: "sqsubset"
-        },
-        "sqsupseteq": {
-            name: "sqsupseteq"
-        },
-        "sqsubseteq": {
-            name: "sqsubseteq"
-        },
-        "sqcap": {
-            name: "sqcap"
-        },
-        "sqcup": {
-            name: "sqcup"
-        },
-
-        // 关系函数， 逻辑
-        "wedge": {
-            name: "wedge"
-        },
-        "vee": {
-            name: "vee"
-        },
-        "mid": {
-            name: "mid"
-        },
-
-        // 关系函数， 否定
-        // TODO 需补充
-
         "^": {
             name: "superscript",
             type: TYPE.OP,
-            handler: scriptHandler,
-            priority: 3
+            handler: scriptHandler
         },
         "_": {
             name: "subscript",
             type: TYPE.OP,
-            handler: scriptHandler,
-            priority: 3
+            handler: scriptHandler
         },
         "frac": {
             name: "fraction",

@@ -13,7 +13,8 @@ define( function ( require, exports, module ) {
         "[": t,
         "]": t,
         "(": t,
-        ")": t
+        ")": t,
+        "|": t
     };
 
 } );

@@ -190,6 +190,18 @@ define( function ( require, exports, module ) {
 
             return result;
 
+        },
+
+        serialization: function ( tree ) {
+
+            return this.impl.serialization( tree );
+
+        },
+
+        expand: function ( obj ) {
+
+            this.impl.expand( obj );
+
         }
 
     } );

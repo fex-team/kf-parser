@@ -33,21 +33,25 @@
     </style>
     <script src="dev-lib/kitygraph.all.js"></script>
     <script src="dev-lib/kity-formula.all.js"></script>
-    <script src="dev-lib/sea-debug.js"></script>
+
+    <script src="dev-lib/dev-define.js"></script>
     <script>
-        seajs.config( {
-            base: "./src"
-        } );
+        inc.config({
+            base: './src'
+        });
+    </script>
+    <script src="dev-lib/exports.js"></script>
+    <script src="dev-lib/dev-start.js"></script>
+    <script>
 
-        define( "start", function ( require, exports, module ) {
+        window.onload = function () {
 
-            var Parser = require( "parser" ).Parser,
-                Assembly = require( "assembly" ),
+            var Parser = kf.Parser,
+                Assembly = kf.Assembly,
                 assembly = Assembly.use( document.getElementById( "container" ), {
                     fontsize: 16
                 } );
 
-            require( 'impl/latex/latex' );
 
             var latexParser = Parser.use( "latex" );
 
@@ -71,15 +75,12 @@
                 var value = document.getElementById( "latexInput" ).value,
                     parseResult = latexParser.parse( value );
 
-                assembly.regenerateBy( parseResult );
+                debugger;
+//                var tt = latexParser.serialization( parseResult.tree );
+//                assembly.regenerateBy( latexParser.parse( tt ) );
+                var tt = assembly.regenerateBy( parseResult );
 
             }
-
-        } );
-
-        window.onload = function () {
-
-            seajs.use( 'start' );
 
         };
 
@@ -96,7 +97,8 @@
             <!--<textarea id="latexInput">a+b+c-d</textarea>-->
             <!--<textarea id="latexInput">a+b+{c+d}^2+acd</textarea>-->
             <!--<textarea id="latexInput">\sqrt[n]{ab}=\sqrt[n]{a}\cdot\sqrt[n]{b}</textarea>-->
-            <textarea id="latexInput">\left [ (a+b-c) \right ]</textarea>
+            <!--<textarea id="latexInput">\left [ (a+b-c) \right ]</textarea>-->
+            <textarea id="latexInput">e=\lim _{n\to \infty }\left(1+\frac{1233}{n}\right)</textarea>
         </div>
         <div class="split">
             <button id="parseBtn" type="button">转换</button>

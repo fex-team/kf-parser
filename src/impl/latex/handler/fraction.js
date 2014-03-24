@@ -10,7 +10,7 @@ define( function ( require, exports, module ) {
         var numerator = unprocessedStack.shift(),   // 分子
             denominator = unprocessedStack.shift(); // 分母
 
-        if ( !numerator || !denominator ) {
+        if ( numerator === undefined || denominator === undefined ) {
             throw new Error( "Frac: Syntax Error" );
         }
 
