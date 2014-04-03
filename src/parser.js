@@ -192,9 +192,9 @@ define( function ( require, exports, module ) {
 
         },
 
-        serialization: function ( tree ) {
+        serialization: function ( tree, options ) {
 
-            return this.impl.serialization( tree );
+            return this.impl.serialization( tree, options );
 
         },
 

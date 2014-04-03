@@ -2,6 +2,7 @@
 <html>
 <head>
     <title></title>
+    <meta charset="utf-8">
     <style type="text/css">
         html, body {
             width: 100%;
@@ -75,7 +76,6 @@
                 var value = document.getElementById( "latexInput" ).value,
                     parseResult = latexParser.parse( value );
 
-                debugger;
 //                var tt = latexParser.serialization( parseResult.tree );
 //                assembly.regenerateBy( latexParser.parse( tt ) );
                 var tt = assembly.regenerateBy( parseResult );

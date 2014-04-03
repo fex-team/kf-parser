@@ -43,7 +43,7 @@ define( function ( require, exports, module ) {
 
     Assembly.prototype.regenerateBy = function ( data ) {
 
-        this.formula.clear();
+        this.formula.clearExpressions();
         return this.generateBy( data );
 
     };
@@ -57,7 +57,8 @@ define( function ( require, exports, module ) {
 
         var currentOperand = null,
             exp = null,
-            hasCursor = false,
+            // 记录光标位置
+            cursorLocation = [],
             operand = tree.operand || [],
             constructor = null,
             constructorProxy;
@@ -66,20 +67,22 @@ define( function ( require, exports, module ) {
 
         // 文本表达式已经不需要再处理了
         if ( tree.name.indexOf( "text" ) === -1 ) {
-
             // 处理操作数
-            for ( var i = 0, j= 0, len = operand.length; j < len; j++ ) {
+            for ( var i = 0, len = operand.length; i < len; i++ ) {
 
-                currentOperand = operand[ j ];
+                currentOperand = operand[ i ];
 
                 //TODO 光标定位， 配合编辑器， 后期应该考虑是否有更佳的方案来实现
                 if ( currentOperand === CURSOR_CHAR ) {
-                    hasCursor = true;
-                    selectInfo.index = i;
+                    cursorLocation.push( i );
+                    if ( !selectInfo.hasOwnProperty( "startOffset" ) ) {
+                        // 字符串中的开始偏移是需要修正的
+                        selectInfo.startOffset = i;
+                    }
+                    selectInfo.endOffset = i;
                     if ( tree.attr && tree.attr.id ) {
                         selectInfo.groupId = tree.attr.id;
                     }
-                    originTree.operand.splice( i, 1 );
                     continue;
                 }
 
@@ -90,7 +93,16 @@ define( function ( require, exports, module ) {
 
                 } else if ( typeof currentOperand === "string" ) {
 
-                    operand[ i ] = createObject( 'text', currentOperand );
+                    // 括号表达式不能对前2个参数做处理， 这两个参数是代表括号类型
+                    if ( tree.name === "brackets" && i < 2 ) {
+                        operand[ i ] = currentOperand;
+
+                    // 函数表达式不能对第1个参数做处理， 这个参数是代表函数类型
+                    } else if ( tree.name === "function" && i === 0 ) {
+                        operand[ i ] = currentOperand;
+                    } else {
+                        operand[ i ] = createObject( 'text', currentOperand );
+                    }
                     objTree.operand.push( operand[ i ] );
 
                 } else {
@@ -100,12 +112,16 @@ define( function ( require, exports, module ) {
 
                 }
 
-                i++;
-
             }
 
-            if ( hasCursor ) {
-                operand.length = operand.length - 1;
+            while ( i = cursorLocation.length ) {
+
+                i = cursorLocation[ i - 1 ];
+                operand.splice( i, 1 );
+                cursorLocation.length--;
+
+                originTree.operand.splice( i, 1 );
+
             }
 
         }

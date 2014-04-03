@@ -27,7 +27,7 @@ define( function () {
 
         result.push( " " + operands[ 1 ] );
 
-        return "{" + result.join( "" ) + "}";
+        return result.join( "" );
 
     };
 

@@ -7,14 +7,14 @@ define( function ( require ) {
     var reverseHandlerTable = require( "impl/latex/define/reverse" ),
         specialCharPattern = /(\\[\w]+)\\/g;
 
-    return function ( tree ) {
+    return function ( tree, options ) {
 
-        return reverseParse( tree ).replace( /^{|}$/g, "" );
+        return reverseParse( tree, options );
 
     };
 
 
-    function reverseParse ( tree ) {
+    function reverseParse ( tree, options ) {
 
         var operands = [],
             originalOperands = null;
@@ -24,6 +24,11 @@ define( function ( require ) {
             return tree.replace( specialCharPattern, function ( match, group ) {
                 return group + " ";
             } );
+        }
+
+        // combination需要特殊处理, 重复嵌套的combination节点要删除
+        if ( tree.name === "combination" && tree.operand.length === 1 && tree.operand[0].name === "combination" ) {
+            tree = tree.operand[ 0 ];
         }
 
         originalOperands = tree.operand;
@@ -38,7 +43,7 @@ define( function ( require ) {
 
         }
 
-        return reverseHandlerTable[ tree.name ]( operands );
+        return reverseHandlerTable[ tree.name ].call( tree, operands, options );
 
     }
 

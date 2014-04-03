@@ -19,9 +19,16 @@ define( function ( require ) {
 
         while ( currentUnit = units.shift() ) {
 
+
+            // 移除brackets中外层包裹的combination节点
+            if ( currentUnit.name === "combination" && currentUnit.operand.length === 1 && currentUnit.operand[ 0 ].name === "brackets" ) {
+                currentUnit = currentUnit.operand[ 0 ];
+            }
+
             if ( Utils.isArray( currentUnit ) ) {
 
                 signStack.push( arguments.callee( currentUnit ) );
+
                 continue;
 
             }
@@ -30,6 +37,7 @@ define( function ( require ) {
 
         }
 
+        // 要处理brackets被附加的包裹元素
         return signStack;
 
     };

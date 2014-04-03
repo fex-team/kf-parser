@@ -6,9 +6,9 @@ define( function () {
 
     var pattern = new RegExp( "\uF155", "g" );
 
-    return function ( operands ) {
+    return function ( operands, options ) {
 
-        if ( /^{([\s\S]*)}$/g.test( operands.join( "" ).replace( pattern, "" ) ) ) {
+        if ( this.attr[ "data-root" ] || this.attr[ "data-placeholder" ] ) {
             return operands.join( "" );
         }
 

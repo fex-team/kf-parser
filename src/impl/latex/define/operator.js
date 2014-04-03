@@ -35,11 +35,13 @@ define( function ( require, exports, module ) {
         "sum": {
             name: "summation",
             type: TYPE.FN,
+            traversal: "rtl",
             handler: require( "impl/latex/handler/summation" )
         },
         "int": {
             name: "integration",
             type: TYPE.FN,
+            traversal: "rtl",
             handler: require( "impl/latex/handler/integration" )
         },
 

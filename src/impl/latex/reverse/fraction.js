@@ -6,7 +6,7 @@ define( function () {
 
     return function ( operands ) {
 
-        return "{\\frac " + operands[0] + " " + operands[ 1 ] + "}";
+        return "\\frac " + operands[0] + " " + operands[ 1 ];
 
     };
 

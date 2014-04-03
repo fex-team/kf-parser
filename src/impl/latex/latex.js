@@ -33,9 +33,9 @@ define( function ( require, exports, module ) {
 
         },
 
-        serialization: function ( tree ) {
+        serialization: function ( tree, options ) {
 
-            return serialization( tree );
+            return serialization( tree, options );
 
         },
 

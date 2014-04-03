@@ -20,7 +20,7 @@ define( function () {
 
         result.push( " " + operands[ 0 ] );
 
-        return "{" + result.join( "" ) + "}";
+        return result.join( "" );
 
     };
 

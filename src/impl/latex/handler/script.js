@@ -14,6 +14,8 @@ define( function ( require, exports, module ) {
             throw new Error( "Missing script" );
         }
 
+        base = base || "";
+
         if ( base.name === info.name || base.name === "script" ) {
             throw new Error( "script error" );
         }

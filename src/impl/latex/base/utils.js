@@ -4,8 +4,7 @@
 
 define( function ( require, exports, module ) {
 
-    var Checker = require( "impl/latex/base/checker" ),
-        OPERATOR_LIST = require( "impl/latex/define/operator" ),
+    var OPERATOR_LIST = require( "impl/latex/define/operator" ),
         FUNCTION_LIST = require( "impl/latex/define/func" ),
         FUNCTION_HANDLER = require( "impl/latex/handler/func" ),
         Utils = {
@@ -74,15 +73,6 @@ define( function ( require, exports, module ) {
 
         };
 
-
-    // 附加功能到Utils对象
-    for ( var key in Checker ) {
-
-        if ( Checker[ key ] && Checker.hasOwnProperty( key ) ) {
-            Utils[ key ] = Checker[ key ];
-        }
-
-    }
 
     return Utils;
 

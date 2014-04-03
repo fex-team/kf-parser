@@ -12,7 +12,7 @@ define( function () {
      */
     return function ( operands ) {
 
-        return "{" + operands[ 0 ] + "^" + operands[ 1 ] + "_" + operands[ 2 ] + "}";
+        return operands[ 0 ] + "^" + operands[ 1 ] + "_" + operands[ 2 ];
 
     };
 
