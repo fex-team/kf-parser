@@ -114,6 +114,12 @@ define( function ( require, exports, module ) {
 
             }
 
+
+            // 包含有选区时， 需要修正一下偏移
+            if ( cursorLocation.length === 2 ) {
+                selectInfo.endOffset -= 1;
+            }
+
             while ( i = cursorLocation.length ) {
 
                 i = cursorLocation[ i - 1 ];
@@ -157,6 +163,14 @@ define( function ( require, exports, module ) {
                     strGroup: originTree
                 };
             }
+
+            if ( tree.attr[ "data-root" ] ) {
+                mapping[ "root" ] = {
+                    objGroup: exp,
+                    strGroup: originTree
+                };
+            }
+
             exp.setAttr( tree.attr );
         }
 

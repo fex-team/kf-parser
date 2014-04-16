@@ -5,7 +5,7 @@
 define( function ( require ) {
 
     var TYPE = require( "impl/latex/define/type"),
-        mergeHandler = require( "impl/latex/handler/combination"),
+        mergeHandler = require( "impl/latex/handler/combination" ),
         Utils = require( "impl/latex/base/utils" );
 
     return function ( units ) {
