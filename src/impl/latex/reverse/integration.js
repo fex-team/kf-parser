@@ -14,6 +14,15 @@ define( function () {
 
         var result = [ "\\int" ];
 
+        // 修正多重积分的序列化
+        if ( this.callFn && this.callFn.setType ) {
+            result = [ "\\" ];
+            for ( var i = 0, len = this.callFn.setType; i < len; i++ ) {
+                result.push( "i" );
+            }
+            result.push( "nt" );
+        }
+
         // 上标
         if ( operands[ 1 ] ) {
             result.push( "^" + operands[ 1 ] );
