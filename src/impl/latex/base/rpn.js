@@ -54,7 +54,7 @@ define( function ( require ) {
 
         while ( ( currentUnit = units.pop() ) !== undefined ) {
 
-            if ( currentUnit && typeof currentUnit === "object" && currentUnit.sign === false ) {
+            if ( currentUnit && typeof currentUnit === "object" && ( currentUnit.sign === false || currentUnit.name === "function" )  ) {
                 // 预先处理不可作为独立符号的函数
                 var tt = currentUnit.handler( currentUnit, [], processed.reverse() );
                 processed.unshift( tt );

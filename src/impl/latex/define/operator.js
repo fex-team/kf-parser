@@ -5,7 +5,6 @@
 define( function ( require, exports, module ) {
 
     var scriptHandler = require( "impl/latex/handler/script" ),
-        funcHandler = require( "impl/latex/handler/func" ),
         TYPE = require( "impl/latex/define/type" );
 
     return {
