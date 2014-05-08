@@ -11,7 +11,7 @@ define( function ( require, exports, module ) {
 
         var params = ScriptExtractor.exec( unprocessedStack );
 
-        info.operand = [ info.params, params.superscript, params.subscript ];
+        info.operand = [ info.params, params.expr, params.superscript, params.subscript ];
         delete info.params;
         delete info.handler;
 

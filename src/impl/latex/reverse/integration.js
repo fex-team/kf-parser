@@ -23,13 +23,17 @@ define( function () {
         }
 
         // 上标
-        if ( operands[ 0 ] ) {
-            result.push( "^" + operands[ 0 ] );
+        if ( operands[ 1 ] ) {
+            result.push( "^" + operands[ 1 ] );
         }
 
         // 下标
-        if ( operands[ 1 ] ) {
-            result.push( "_" + operands[ 1 ] );
+        if ( operands[ 2 ] ) {
+            result.push( "_" + operands[ 2 ] );
+        }
+
+        if ( operands[ 0 ] ) {
+            result.push( " " + operands[ 0 ] );
         }
 
         return result.join( "" );

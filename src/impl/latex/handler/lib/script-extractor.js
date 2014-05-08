@@ -8,30 +8,15 @@ define( function ( require ) {
 
         exec: function ( stack ) {
 
-            var scriptGroup = extractor( stack ),
-                nextGroup = null,
-                result = {
-                    superscript: null,
-                    subscript: null
-                };
+            // 提取上下标
+            var result = extractScript( stack ),
+                expr = stack.shift();
 
-            if ( scriptGroup ) {
-                nextGroup = extractor( stack );
-            } else {
-                return result;
+            if ( expr && expr.name.indexOf( "script" ) !== -1 ) {
+                throw new Error( "Script: syntax error!" );
             }
 
-            result[ scriptGroup.type ] = scriptGroup.value || null;
-
-            if ( nextGroup ) {
-
-                if ( nextGroup.type === scriptGroup.type ) {
-                    throw new Error( 'Script: syntax error!' );
-                }
-
-                result[ nextGroup.type ] = nextGroup.value || null;
-
-            }
+            result.expr = expr || null;
 
             return result;
 
@@ -39,7 +24,38 @@ define( function ( require ) {
 
     };
 
-    function extractor ( stack ) {
+    function extractScript ( stack ) {
+
+        var scriptGroup = extract( stack ),
+            nextGroup = null,
+            result = {
+                superscript: null,
+                subscript: null
+            };
+
+        if ( scriptGroup ) {
+            nextGroup = extract( stack );
+        } else {
+            return result;
+        }
+
+        result[ scriptGroup.type ] = scriptGroup.value || null;
+
+        if ( nextGroup ) {
+
+            if ( nextGroup.type === scriptGroup.type ) {
+                throw new Error( 'Script: syntax error!' );
+            }
+
+            result[ nextGroup.type ] = nextGroup.value || null;
+
+        }
+
+        return result;
+
+    }
+
+    function extract ( stack ) {
 
         var forward = stack.shift();
 

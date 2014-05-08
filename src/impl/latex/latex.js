@@ -110,7 +110,7 @@ define( function ( require, exports, module ) {
         split: function ( data ) {
 
             var units = [],
-                pattern = /(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
+                pattern = /(?:\\[,]\s*)|(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
                 emptyPattern = /^\s+|\s+$/g,
                 match = null;
 

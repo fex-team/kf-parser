@@ -16,12 +16,16 @@ define( function () {
 
         // 上标
         if ( operands[ 2 ] ) {
-            result.push( "^" + operands[ 1 ] );
+            result.push( "^" + operands[ 2 ] );
         }
 
         // 下标
         if ( operands[ 3 ] ) {
-            result.push( "_" + operands[ 2 ] );
+            result.push( "_" + operands[ 3 ] );
+        }
+
+        if ( operands[ 1 ] ) {
+            result.push( " " + operands[ 1 ] );
         }
 
         return result.join( "" );

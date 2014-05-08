@@ -11,7 +11,7 @@ define( function ( require, exports, module ) {
         var count = unprocessedStack.shift(),
             params = ScriptExtractor.exec( unprocessedStack );
 
-        info.operand = [ params.superscript, params.subscript ];
+        info.operand = [ params.expr, params.superscript, params.subscript ];
         // 参数配置调用
         info.callFn = {
             setType: [ count | 0 ]

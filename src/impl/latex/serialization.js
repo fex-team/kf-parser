@@ -5,7 +5,7 @@
 define( function ( require ) {
 
     var reverseHandlerTable = require( "impl/latex/define/reverse" ),
-        specialCharPattern = /(\\[\w]+)\\/g;
+        specialCharPattern = /(\\(?:[\w]+)|(,))\\/g;
 
     return function ( tree, options ) {
 
