@@ -12,6 +12,14 @@ define( function () {
      */
     return function ( operands ) {
 
+        if ( operands[ 0 ] === "{" || operands[ 0 ] === "}" ) {
+            operands[ 0 ] = "\\" + operands[ 0 ];
+        }
+
+        if ( operands[ 1 ] === "{" || operands[ 1 ] === "}" ) {
+            operands[ 1 ] = "\\" + operands[ 1 ];
+        }
+
         return [
             "\\left",
             operands[ 0 ],

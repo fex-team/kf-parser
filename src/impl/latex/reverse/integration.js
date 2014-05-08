@@ -6,13 +6,12 @@ define( function () {
 
     /**
      * operands中元素对照表
-     * 0: 表达式
-     * 1: 上标
-     * 2: 下标
+     * 0: 上标
+     * 1: 下标
      */
     return function ( operands ) {
 
-        var result = [ "\\int" ];
+        var result = [ "\\int " ];
 
         // 修正多重积分的序列化
         if ( this.callFn && this.callFn.setType ) {
@@ -20,20 +19,18 @@ define( function () {
             for ( var i = 0, len = this.callFn.setType; i < len; i++ ) {
                 result.push( "i" );
             }
-            result.push( "nt" );
+            result.push( "nt " );
         }
 
         // 上标
-        if ( operands[ 1 ] ) {
-            result.push( "^" + operands[ 1 ] );
+        if ( operands[ 0 ] ) {
+            result.push( "^" + operands[ 0 ] );
         }
 
         // 下标
-        if ( operands[ 2 ] ) {
-            result.push( "_" + operands[ 2 ] );
+        if ( operands[ 1 ] ) {
+            result.push( "_" + operands[ 1 ] );
         }
-
-        result.push( " " + operands[ 0 ] );
 
         return result.join( "" );
 
