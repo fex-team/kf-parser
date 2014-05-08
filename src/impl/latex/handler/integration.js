@@ -4,14 +4,14 @@
 
 define( function ( require, exports, module ) {
 
-    var extractFn = require( "impl/latex/handler/lib/int-extract" );
+    var ScriptExtractor = require( "impl/latex/handler/lib/script-extractor" );
 
     return function ( info, processedStack, unprocessedStack ) {
 
         var count = unprocessedStack.shift(),
-            params = extractFn( unprocessedStack );
+            params = ScriptExtractor.exec( unprocessedStack );
 
-        info.operand = [ params.exp, params.sup, params.sub ];
+        info.operand = [ params.superscript, params.subscript ];
         // 参数配置调用
         info.callFn = {
             setType: [ count | 0 ]
