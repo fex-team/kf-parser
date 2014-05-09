@@ -26,7 +26,6 @@ define( function ( require, exports, module ) {
 
             var units = this.split( this.format( data ) );
 
-            debugger;
             units = this.parseToGroup( units );
 
             units = this.parseToStruct( units );
