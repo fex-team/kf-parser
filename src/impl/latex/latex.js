@@ -110,7 +110,7 @@ define( function ( require, exports, module ) {
         split: function ( data ) {
 
             var units = [],
-                pattern = /(?:\\[,]\s*)|(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
+                pattern = /(?:\\[,{}]\s*)|(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
                 emptyPattern = /^\s+|\s+$/g,
                 match = null;
 
@@ -205,7 +205,7 @@ define( function ( require, exports, module ) {
                         break;
 
                     default:
-                        group.push( units[i].replace( leftCharPattern, "{" ).replace( rightCharPattern, "}" ) );
+                        group.push( units[i].replace( leftCharPattern, "\\{" ).replace( rightCharPattern, "\\}" ) );
                         break;
 
                 }
