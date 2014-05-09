@@ -513,7 +513,7 @@ define("char/text", [ "kity", "font/manager", "signgroup", "def/gtype" ], functi
         },
         translation: function(content) {
             var fontFamily = this.fontFamily;
-            return content.replace(/\\([a-zA-Z,]+)\\/g, function(match, input) {
+            return content.replace(/\\([a-zA-Z,{}]+)\\/g, function(match, input) {
                 if (input === ",") {
                     return "￼ ￼";
                 }
@@ -3460,7 +3460,9 @@ define("font/kf-ams-main", [], function(require) {
             vert: "|",
             Vert: "ǁ",
             "|": "ǁ",
-            backslash: "ǂ",
+            "{": "{",
+            "}": "}",
+            backslash: "\\",
             langle: "〈",
             rangle: "〉",
             lceil: "⌈",

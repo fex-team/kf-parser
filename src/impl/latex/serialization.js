@@ -5,7 +5,8 @@
 define( function ( require ) {
 
     var reverseHandlerTable = require( "impl/latex/define/reverse" ),
-        specialCharPattern = /(\\(?:[\w]+)|([,\{\}]))\\/g;
+        SPECIAL_LIST = require( "impl/latex/define/special" ),
+        specialCharPattern = /(\\(?:[\w]+)|(?:[^a-z]))\\/gi;
 
     return function ( tree, options ) {
 
@@ -21,9 +22,15 @@ define( function ( require ) {
 
         // 字符串处理， 需要处理特殊字符
         if ( typeof tree !== "object" ) {
+
+            if ( isSpecialCharacter( tree ) ) {
+                return "\\" + tree + " ";
+            }
+
             return tree.replace( specialCharPattern, function ( match, group ) {
                 return group + " ";
             } );
+            
         }
 
         // combination需要特殊处理, 重复嵌套的combination节点要删除
@@ -45,6 +52,10 @@ define( function ( require ) {
 
         return reverseHandlerTable[ tree.name ].call( tree, operands, options );
 
+    }
+
+    function isSpecialCharacter ( char ) {
+        return !!SPECIAL_LIST[ char ];
     }
 
 } );

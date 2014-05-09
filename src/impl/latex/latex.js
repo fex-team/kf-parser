@@ -10,6 +10,7 @@ define( function ( require, exports, module ) {
         serialization = require( "impl/latex/serialization" ),
         OP_DEFINE = require( "impl/latex/define/operator" ),
         REVERSE_DEFINE = require( "impl/latex/define/reverse" ),
+        SPECIAL_LIST = require( "impl/latex/define/special" ),
         Utils = require( "impl/latex/base/utils" );
 
     // data
@@ -25,6 +26,7 @@ define( function ( require, exports, module ) {
 
             var units = this.split( this.format( data ) );
 
+            debugger;
             units = this.parseToGroup( units );
 
             units = this.parseToStruct( units );
@@ -110,7 +112,7 @@ define( function ( require, exports, module ) {
         split: function ( data ) {
 
             var units = [],
-                pattern = /(?:\\[,{}]\s*)|(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
+                pattern = /(?:\\[^a-z]\s*)|(?:\\[a-z]+\s*)|(?:[{}]\s*)|(?:[^\\{}]\s*)/gi,
                 emptyPattern = /^\s+|\s+$/g,
                 match = null;
 
@@ -285,11 +287,21 @@ define( function ( require, exports, module ) {
     function transformSpecialCharacters ( char ) {
 
         if ( char.indexOf( "\\" ) === 0 ) {
-            return char + "\\";
+
+            char = char.substring( 1 );
+
+            if ( !isSpecialCharacter( char ) ) {
+                return "\\" + char + "\\";
+            }
+
         }
 
         return char;
 
+    }
+
+    function isSpecialCharacter ( char ) {
+        return !!SPECIAL_LIST[ char ];
     }
 
     function clearEmpty ( data ) {
