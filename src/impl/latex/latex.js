@@ -262,9 +262,12 @@ define( function ( require, exports, module ) {
      */
     function parseStruct ( str ) {
 
-        var type = Utils.getLatexType( str );
+        // 特殊控制字符优先处理
+        if ( isSpecialCharacter( str ) ) {
+            return str.substring( 1 );
+        }
 
-        switch ( type ) {
+        switch ( Utils.getLatexType( str ) ) {
 
             case "operator":
 
@@ -286,13 +289,7 @@ define( function ( require, exports, module ) {
     function transformSpecialCharacters ( char ) {
 
         if ( char.indexOf( "\\" ) === 0 ) {
-
-            char = char.substring( 1 );
-
-            if ( !isSpecialCharacter( char ) ) {
-                return "\\" + char + "\\";
-            }
-
+            return char + "\\";
         }
 
         return char;
@@ -300,7 +297,13 @@ define( function ( require, exports, module ) {
     }
 
     function isSpecialCharacter ( char ) {
-        return !!SPECIAL_LIST[ char ];
+
+        if ( char.indexOf( "\\" ) === 0 ) {
+            return !!SPECIAL_LIST[ char.substring( 1 ) ];
+        }
+
+        return false;
+
     }
 
     function clearEmpty ( data ) {
