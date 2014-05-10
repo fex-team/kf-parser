@@ -46,8 +46,14 @@ define( function ( require, exports, module ) {
 
         "brackets": {
             name: "brackets",
-            type: "TYPE.FN",
+            type: TYPE.FN,
             handler: require( "impl/latex/handler/brackets" )
+        },
+
+        "mathcal": {
+            name: "mathcal",
+            type: TYPE.FN,
+            handler: require( "impl/latex/handler/mathcal" )
         }
 
     };
