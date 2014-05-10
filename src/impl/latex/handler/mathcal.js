@@ -13,7 +13,13 @@ define( function ( require, exports, module ) {
         }
 
         info.name = "text";
-        info.operand = [ chars, "KF AMS CAL" ];
+        info.attr = {
+            _reverse: "mathcal"
+        };
+        info.callFn = {
+            setFamily: [ "KF AMS CAL" ]
+        };
+        info.operand = [ chars ];
 
         delete info.handler;
 

@@ -18,6 +18,7 @@ define( function ( require ) {
     function reverseParse ( tree, options ) {
 
         var operands = [],
+            reverseHandlerName = null,
             originalOperands = null;
 
         // 字符串处理， 需要处理特殊字符
@@ -50,7 +51,13 @@ define( function ( require ) {
 
         }
 
-        return reverseHandlerTable[ tree.name ].call( tree, operands, options );
+        if ( tree.attr && tree.attr._reverse ) {
+            reverseHandlerName = tree.attr._reverse;
+        } else {
+            reverseHandlerName = tree.name;
+        }
+
+        return reverseHandlerTable[ reverseHandlerName ].call( tree, operands, options );
 
     }
 
