@@ -1,5 +1,5 @@
 /*!
- * 逆解析处理函数: fraction
+ * 逆解析处理函数: mathcal
  */
 
 define( function () {

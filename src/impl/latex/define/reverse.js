@@ -16,7 +16,9 @@ define( function ( require ) {
         'radical': require( "impl/latex/reverse/sqrt" ),
         'summation': require( "impl/latex/reverse/summation" ),
         'brackets': require( "impl/latex/reverse/brackets" ),
-        'mathcal': require( "impl/latex/reverse/mathcal" )
+        'mathcal': require( "impl/latex/reverse/mathcal" ),
+        'mathfrak': require( "impl/latex/reverse/mathfrak" ),
+        'mathbb': require( "impl/latex/reverse/mathbb" )
 
     };
 

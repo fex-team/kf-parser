@@ -12,7 +12,7 @@ define( function ( require ) {
             var result = extractScript( stack ),
                 expr = stack.shift();
 
-            if ( expr && expr.name.indexOf( "script" ) !== -1 ) {
+            if ( expr && expr.name && expr.name.indexOf( "script" ) !== -1 ) {
                 throw new Error( "Script: syntax error!" );
             }
 

@@ -1,7 +1,3 @@
-/**
- * 逆波兰表达式转换函数
- */
-
 define( function ( require ) {
 
     var Utils = require( "impl/latex/base/utils" );

@@ -53,7 +53,22 @@ define( function ( require, exports, module ) {
         "mathcal": {
             name: "mathcal",
             type: TYPE.FN,
+            sign: false,
             handler: require( "impl/latex/handler/mathcal" )
+        },
+
+        "mathfrak": {
+            name: "mathfrak",
+            type: TYPE.FN,
+            sign: false,
+            handler: require( "impl/latex/handler/mathfrak" )
+        },
+
+        "mathbb": {
+            name: "mathbb",
+            type: TYPE.FN,
+            sign: false,
+            handler: require( "impl/latex/handler/mathbb" )
         }
 
     };
