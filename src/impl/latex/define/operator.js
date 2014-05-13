@@ -69,6 +69,13 @@ define( function ( require, exports, module ) {
             type: TYPE.FN,
             sign: false,
             handler: require( "impl/latex/handler/mathbb" )
+        },
+
+        "mathrm": {
+            name: "mathrm",
+            type: TYPE.FN,
+            sign: false,
+            handler: require( "impl/latex/handler/mathrm" )
         }
 
     };

@@ -7,7 +7,9 @@ define( function ( require, exports, module ) {
     return {
 
         // 积分预处理器
-        int: require( "impl/latex/pre/int" )
+        int: require( "impl/latex/pre/int" ),
+        // 引号预处理
+        quot: require( "impl/latex/pre/quot" )
 
     };
 

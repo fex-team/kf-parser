@@ -18,7 +18,8 @@ define( function ( require ) {
         'brackets': require( "impl/latex/reverse/brackets" ),
         'mathcal': require( "impl/latex/reverse/mathcal" ),
         'mathfrak': require( "impl/latex/reverse/mathfrak" ),
-        'mathbb': require( "impl/latex/reverse/mathbb" )
+        'mathbb': require( "impl/latex/reverse/mathbb" ),
+        'mathrm': require( "impl/latex/reverse/mathrm" )
 
     };
 
