@@ -50,21 +50,24 @@
 
             var latexParser = Parser.use( "latex" ),
                 list = [
-                    "\\mathrm{A}", "\\mathrm{B}", "\\mathrm{C}", "\\mathrm{D}", "\\mathrm{E}"
-                    , "\\mathrm{F}", "\\mathrm{G}", "\\mathrm{H}", "\\mathrm{I}", "\\mathrm{J}"
-                    , "\\mathrm{K}", "\\mathrm{L}", "\\mathrm{M}", "\\mathrm{N}", "\\mathrm{O}"
-                    , "\\mathrm{P}", "\\mathrm{Q}", "\\mathrm{R}", "\\mathrm{S}", "\\mathrm{T}"
-                    , "\\mathrm{U}", "\\mathrm{V}", "\\mathrm{W}", "\\mathrm{X}", "\\mathrm{Y}"
-                    , "\\mathrm{Z}", "\\mathrm{a}", "\\mathrm{b}", "\\mathrm{c}", "\\mathrm{d}"
-                    , "\\mathrm{e}", "\\mathrm{f}", "\\mathrm{g}", "\\mathrm{h}", "\\mathrm{i}"
-                    , "\\mathrm{j}", "\\mathrm{k}", "\\mathrm{l}", "\\mathrm{m}", "\\mathrm{n}"
-                    , "\\mathrm{o}", "\\mathrm{p}", "\\mathrm{q}", "\\mathrm{r}", "\\mathrm{s}"
-                    , "\\mathrm{t}", "\\mathrm{u}", "\\mathrm{v}", "\\mathrm{w}", "\\mathrm{x}"
-                    , "\\mathrm{y}", "\\mathrm{z}"
+                    "gets", "to", "uparrow", "downarrow", "leftrightarrow", "updownarrow",
+                    "Leftarrow", "Rightarrow", "Uparrow", "Downarrow", "Leftrightarrow",
+                    "Updownarrow", "longleftarrow", "longrightarrow", "longleftrightarrow",
+                    "Longleftarrow", "Longrightarrow", "Longleftrightarrow", "nearrow",
+                    "nwarrow", "searrow", "swarrow", "nleftarrow", "nrightarrow",
+                    "nLeftarrow", "nRightarrow", "nLeftrightarrow", "leftharpoonup",
+                    "leftharpoondown", "rightharpoonup",
+                    "rightharpoondown", "upharpoonleft", "upharpoonright", "downharpoonleft",
+                    "downharpoonright", "leftrightharpoons", "rightleftharpoons", "leftleftarrows",
+                    "rightrightarrows", "upuparrows", "downdownarrows", "leftrightarrows",
+                    "rightleftarrows", "looparrowleft", "looparrowright", "leftarrowtail",
+                    "rightarrowtail", "Lsh", "Rsh", "Lleftarrow", "Rrightarrow", "curvearrowleft",
+                    "curvearrowright", "circlearrowleft", "circlearrowright", "multimap",
+                    "leftrightsquigarrow", "twoheadleftarrow", "twoheadrightarrow", "rightsquigarrow"
                 ];
 
             kity.Utils.each( list, function ( str ) {
-                createFormula( str );
+                createFormula( "\\" + str );
             } );
 
             function parse ( ass, str ) {
