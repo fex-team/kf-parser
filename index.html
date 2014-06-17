@@ -12,7 +12,7 @@
         }
 
         .main {
-            width: 1000px;
+            width: 1000px;e
             height: 100%;
             margin: 0 auto;
         }
@@ -50,17 +50,15 @@
         window.onload = function () {
 
             var Parser = kf.Parser,
-                Factory = kf.Factory,
+                Assembly = kf.Assembly,
                 latexParser = Parser.use( "latex" );
 
-            var assemblyWrapper = Factory.use( document.getElementById( "container" ), {
-                fontsize: 25,
-                resource: {
-                    path: "./resource/"
-                }
-            });
+            kf.ResourceManager.ready( function ( Formula ) {
 
-            assemblyWrapper.ready( function ( assembly ) {
+                var formula = new Formula( document.getElementById( "container" ), {
+                        fontsize: 25
+                    }),
+                    assembly = new Assembly( formula );
 
                 document.getElementById( "parseBtn" ).onclick = function () {
                     parse();
@@ -76,12 +74,14 @@
                 function parse () {
 
                     var value = document.getElementById( "latexInput" ).value,
-                        parseResult = latexParser.parse( value );
+                            parseResult = latexParser.parse( value );
 
                     assembly.regenerateBy( parseResult );
 
                 }
 
+            }, {
+                path: "./resource/"
             } );
 
         };
