@@ -7,8 +7,52 @@ define( function ( require, exports, module ) {
     var CONSTRUCT_MAPPING = {},
         CURSOR_CHAR = "\uF155";
 
-    function Assembly ( container, config ) {
-        this.formula = new kf.Formula( container, config );
+    /* ---------------------------------- AssemblyWrapper 对象 */
+    function AssemblyWrapper ( container, config ) {
+
+        var _self = this;
+
+        this._readyState = false;
+        this._callbacks = [];
+        this.assembly = null;
+
+        kf.ResourceManager.ready( function ( Formula ) {
+
+            _self.assembly = new Assembly( new Formula( container, config ) );
+            _self._readyState = true;
+            _self.__trigger();
+
+        }, config.resource );
+
+    }
+
+    AssemblyWrapper.prototype.ready = function ( cb ) {
+
+        var _self = this;
+
+        if ( this._readyState ) {
+            window.setTimeout( function () {
+                cb.call( _self.assembly, _self.assembly );
+            }, 0 );
+        } else {
+            this._callbacks.push( cb );
+        }
+
+    };
+
+    AssemblyWrapper.prototype.__trigger = function () {
+
+        for ( var i = 0, len = this._callbacks.length; i < len; i++ ) {
+            this._callbacks[ i ].call( this.assembly, this.assembly );
+        }
+
+    };
+
+    /* ---------------------------------- Assembly 对象 */
+    function Assembly ( formula ) {
+
+        this.formula = formula;
+
     }
 
     Assembly.prototype.generateBy = function ( data ) {
@@ -20,11 +64,11 @@ define( function ( require, exports, module ) {
 
         if ( typeof tree === "string" ) {
 
-            objTree = new kf.TextExpression( tree );
-
-            this.formula.appendExpression( objTree );
-
-            //TODO return值统一
+//            objTree = new kf.TextExpression( tree );
+//
+//            this.formula.appendExpression( objTree );
+//
+//            //TODO return值统一
 
         } else {
 
@@ -251,8 +295,8 @@ define( function ( require, exports, module ) {
     }
 
     return {
-        use: function ( container, config) {
-            return new Assembly( container, config );
+        use: function ( container, config ) {
+            return new AssemblyWrapper( container, config );
         }
     };
 

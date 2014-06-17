@@ -32,56 +32,57 @@
             resize: none;
         }
     </style>
+    <script src="dev-lib/jquery-1.10.2.min.js"></script>
     <script src="dev-lib/kitygraph.all.js"></script>
     <script src="dev-lib/kity-formula.all.js"></script>
 
-    <script src="dist/kityformula-parser.all.js"></script>
-    <!--<script src="dev-lib/dev-define.js"></script>-->
-    <!--<script>-->
-        <!--inc.config({-->
-            <!--base: './src'-->
-        <!--});-->
-    <!--</script>-->
-    <!--<script src="dev-lib/exports.js"></script>-->
-    <!--<script src="dev-lib/dev-start.js"></script>-->
+    <!--<script src="dist/kityformula-parser.all.js"></script>-->
+    <script src="dev-lib/dev-define.js"></script>
+    <script>
+        inc.config({
+            base: './src'
+        });
+    </script>
+    <script src="dev-lib/exports.js"></script>
+    <script src="dev-lib/dev-start.js"></script>
     <script>
 
         window.onload = function () {
 
             var Parser = kf.Parser,
-                Assembly = kf.Assembly,
-                assembly = Assembly.use( document.getElementById( "container" ), {
-                    fontsize: 25
-                } );
+                Factory = kf.Factory,
+                latexParser = Parser.use( "latex" );
 
+            var assemblyWrapper = Factory.use( document.getElementById( "container" ), {
+                fontsize: 25,
+                resource: {
+                    path: "./resource/"
+                }
+            });
 
-            var latexParser = Parser.use( "latex" );
+            assemblyWrapper.ready( function ( assembly ) {
 
-            document.getElementById( "parseBtn" ).onclick = function () {
-
-                parse();
-
-            };
-
-            document.onkeydown = function ( e ) {
-
-                if ( e.ctrlKey && e.keyCode === 83 ) {
-                    e.preventDefault();
+                document.getElementById( "parseBtn" ).onclick = function () {
                     parse();
+                };
+
+                document.onkeydown = function ( e ) {
+                    if ( e.ctrlKey && e.keyCode === 83 ) {
+                        e.preventDefault();
+                        parse();
+                    }
+                };
+
+                function parse () {
+
+                    var value = document.getElementById( "latexInput" ).value,
+                        parseResult = latexParser.parse( value );
+
+                    assembly.regenerateBy( parseResult );
+
                 }
 
-            };
-
-            function parse () {
-
-                var value = document.getElementById( "latexInput" ).value,
-                    parseResult = latexParser.parse( value );
-
-//                var tt = latexParser.serialization( parseResult.tree );
-//                assembly.regenerateBy( latexParser.parse( tt ) );
-                var tt = assembly.regenerateBy( parseResult );
-
-            }
+            } );
 
         };
 

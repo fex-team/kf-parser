@@ -12,7 +12,7 @@
         require( "impl/latex/latex" );
 
         global.kf.Parser = Parser;
-        global.kf.Assembly = require( "assembly" );
+        global.kf.Factory = require( "assembly" );
 
     } );
 
