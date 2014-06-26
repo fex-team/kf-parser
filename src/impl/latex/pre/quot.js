@@ -1,7 +1,7 @@
 /**
  * “双引号”预处理器
  */
-define( function ( require ) {
+define( function () {
 
     return function ( input ) {
 

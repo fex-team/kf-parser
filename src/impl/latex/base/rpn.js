@@ -2,11 +2,9 @@ define( function ( require ) {
 
     var Utils = require( "impl/latex/base/utils" );
 
-    return function ( units ) {
+    function rpn ( units ) {
 
         var signStack = [],
-
-            TYPE = require( "impl/latex/define/type"),
 
             currentUnit = null;
 
@@ -23,7 +21,7 @@ define( function ( require ) {
 
             if ( Utils.isArray( currentUnit ) ) {
 
-                signStack.push( arguments.callee( currentUnit ) );
+                signStack.push( rpn( currentUnit ) );
 
                 continue;
 
@@ -36,7 +34,7 @@ define( function ( require ) {
         // 要处理brackets被附加的包裹元素
         return signStack;
 
-    };
+    }
 
     /**
      * “latex函数”处理器
@@ -64,5 +62,7 @@ define( function ( require ) {
         return processed.reverse();
 
     }
+
+    return rpn;
 
 } );

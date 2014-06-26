@@ -2,7 +2,10 @@
  * 装配器
  */
 
-define( function ( require, exports, module ) {
+/* jshint forin: false */
+/* global kf */
+
+define( function () {
 
     var CONSTRUCT_MAPPING = {},
         CURSOR_CHAR = "\uF155";
@@ -23,11 +26,8 @@ define( function ( require, exports, module ) {
 
         if ( typeof tree === "string" ) {
 
-//            objTree = new kf.TextExpression( tree );
-//
-//            this.formula.appendExpression( objTree );
-//
-//            //TODO return值统一
+            //TODO return值统一
+            throw new Error( 'Unhandled error' );
 
         } else {
 
@@ -64,7 +64,7 @@ define( function ( require, exports, module ) {
             cursorLocation = [],
             operand = tree.operand || [],
             constructor = null,
-            constructorProxy;
+            ConstructorProxy;
 
         objTree.operand = [];
 
@@ -111,7 +111,7 @@ define( function ( require, exports, module ) {
                 } else {
 
                     objTree.operand.push( {} );
-                    operand[ i ] = arguments.callee( originTree.operand[ i ], currentOperand, objTree.operand[ objTree.operand.length - 1 ], mapping, selectInfo );
+                    operand[ i ] = generateExpression( originTree.operand[ i ], currentOperand, objTree.operand[ objTree.operand.length - 1 ], mapping, selectInfo );
 
                 }
 
@@ -141,9 +141,9 @@ define( function ( require, exports, module ) {
             throw new Error( 'operator type error: not found ' + tree.operator );
         }
 
-        constructorProxy = function () {};
-        constructorProxy.prototype = constructor.prototype;
-        exp = new constructorProxy();
+        ConstructorProxy = function () {};
+        ConstructorProxy.prototype = constructor.prototype;
+        exp = new ConstructorProxy();
         constructor.apply( exp, operand );
 
         objTree.func = exp;
@@ -168,7 +168,7 @@ define( function ( require, exports, module ) {
             }
 
             if ( tree.attr[ "data-root" ] ) {
-                mapping[ "root" ] = {
+                mapping.root = {
                     objGroup: exp,
                     strGroup: originTree
                 };

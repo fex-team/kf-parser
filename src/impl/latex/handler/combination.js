@@ -2,7 +2,7 @@
  * 合并处理(特殊处理函数)
  */
 
-define( function ( require, exports, module ) {
+define( function () {
 
     return function () {
 

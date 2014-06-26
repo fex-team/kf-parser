@@ -2,7 +2,7 @@
  * 函数列表
  */
 
-define( function ( require, exports, module ) {
+define( function () {
 
     return {
         sin: 1,
@@ -32,7 +32,6 @@ define( function ( require, exports, module ) {
         lim: 1,
         max: 1,
         sinh: 1,
-        cos: 1,
         deg: 1,
         hom: 1,
         liminf: 1,

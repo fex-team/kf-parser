@@ -2,7 +2,7 @@
  * 操作符列表
  */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     var scriptHandler = require( "impl/latex/handler/script" ),
         TYPE = require( "impl/latex/define/type" );

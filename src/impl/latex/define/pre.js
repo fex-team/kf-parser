@@ -2,7 +2,7 @@
  * 预处理器列表
  */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     return {
 

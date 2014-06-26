@@ -2,7 +2,7 @@
  * 通用工具包
  */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     var OPERATOR_LIST = require( "impl/latex/define/operator" ),
         FUNCTION_LIST = require( "impl/latex/define/func" ),
@@ -53,7 +53,7 @@ define( function ( require, exports, module ) {
 
                 return Utils.extend( {
                     params: [ leftBrackets, rightBrackets ]
-                }, OPERATOR_LIST[ "brackets" ] );
+                }, OPERATOR_LIST.brackets );
 
             },
 

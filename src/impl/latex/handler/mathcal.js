@@ -2,7 +2,7 @@
  * 手写体处理
  */
 
-define( function ( require, exports, module ) {
+define( function () {
 
     return function ( info, processedStack, unprocessedStack ) {
 

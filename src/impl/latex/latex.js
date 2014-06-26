@@ -1,8 +1,9 @@
 /**
  * Kity Formula Latex解析器实现
  */
+/* jshint forin: false */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     var Parser = require( "parser" ).Parser,
         LatexUtils = require( "impl/latex/base/latex-utils" ),

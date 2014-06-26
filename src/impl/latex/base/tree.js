@@ -4,20 +4,18 @@
 
 define( function ( require ) {
 
-    var TYPE = require( "impl/latex/define/type"),
-        mergeHandler = require( "impl/latex/handler/combination" ),
+    var mergeHandler = require( "impl/latex/handler/combination" ),
         Utils = require( "impl/latex/base/utils" );
 
-    return function ( units ) {
+    function tree ( units ) {
 
         var currentUnit = null,
-            nextUnit = null,
             tree = [];
 
         for ( var i = 0 , len = units.length; i < len; i++ ) {
 
             if ( Utils.isArray( units[ i ] ) ) {
-                units[ i ] = arguments.callee( units[ i ] );
+                units[ i ] = tree( units[ i ] );
             }
 
         }
@@ -39,6 +37,8 @@ define( function ( require ) {
 
         return mergeHandler( tree );
 
-    };
+    }
+
+    return tree;
 
 } );

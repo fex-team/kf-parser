@@ -2,7 +2,7 @@
  * 括号处理器
  */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     var BRACKETS_TYPE = require( "impl/latex/define/brackets" );
 

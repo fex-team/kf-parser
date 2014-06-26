@@ -2,7 +2,7 @@
  * latex实现工具包
  */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     return {
 

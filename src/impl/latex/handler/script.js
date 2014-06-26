@@ -2,7 +2,7 @@
  * 上下标操作符函数处理
  */
 
-define( function ( require, exports, module ) {
+define( function () {
 
     // 处理函数接口
     return function ( info, processedStack, unprocessedStack ) {

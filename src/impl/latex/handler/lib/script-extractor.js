@@ -2,7 +2,7 @@
  * 通用上下标提取器
  */
 
-define( function ( require ) {
+define( function () {
 
     return {
 

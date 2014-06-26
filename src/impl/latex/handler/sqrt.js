@@ -2,7 +2,7 @@
  * 方根函数处理器
  */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     var mergeHandler = require( "impl/latex/handler/combination" );
 

@@ -2,7 +2,7 @@
  * 分数函数处理器
  */
 
-define( function ( require, exports, module ) {
+define( function () {
 
     // 处理函数接口
     return function ( info, processedStack, unprocessedStack ) {

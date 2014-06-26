@@ -102,16 +102,16 @@ define( function ( require, exports, module ) {
         // 提供构造器的实现的默认结构
         implement: function ( parser ) {
 
-            var impl = function () {},
+            var Impl = function () {},
                 constructor = parser.constructor || function () {},
                 result = function () {
                     ParserInterface.call( this );
                     constructor.call( this );
                 };
 
-            impl.prototype = ParserInterface.prototype;
+            Impl.prototype = ParserInterface.prototype;
 
-            result.prototype = new impl();
+            result.prototype = new Impl();
 
             delete parser.constructor;
 
@@ -148,9 +148,9 @@ define( function ( require, exports, module ) {
      * @constructor
      * @param parserImpl 需代理的对象
      */
-    function ParserProxy ( parserImpl ) {
+    function ParserProxy ( ParserImpl ) {
 
-        this.impl = new parserImpl();
+        this.impl = new ParserImpl();
         this.conf = {};
 
     }
@@ -229,7 +229,7 @@ define( function ( require, exports, module ) {
          * @param data 待解析的数据
          * @return 解析树， 具体格式庆参考Kity Formula Parser 的文档
          */
-        parse: function ( data ) {
+        parse: function () {
 
             throw new Error( "Abstract function" );
 

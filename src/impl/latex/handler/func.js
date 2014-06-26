@@ -2,7 +2,7 @@
  * 函数表达式处理器
  */
 
-define( function ( require, exports, module ) {
+define( function ( require ) {
 
     var ScriptExtractor = require( "impl/latex/handler/lib/script-extractor" );
 

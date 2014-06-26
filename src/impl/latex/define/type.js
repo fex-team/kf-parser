@@ -2,7 +2,7 @@
  * 操作符类型定义
  */
 
-define( function ( require, exports, module ) {
+define( function () {
 
     return {
         OP: 1,

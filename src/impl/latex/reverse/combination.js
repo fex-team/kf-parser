@@ -4,9 +4,7 @@
 
 define( function () {
 
-    var pattern = new RegExp( "\uF155", "g" );
-
-    return function ( operands, options ) {
+    return function ( operands ) {
 
         if ( this.attr[ "data-root" ] || this.attr[ "data-placeholder" ] ) {
             return operands.join( "" );
@@ -14,6 +12,6 @@ define( function () {
 
         return "{" + operands.join( "" ) + "}";
 
-    }
+    };
 
 } );
