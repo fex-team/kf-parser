@@ -5,6 +5,10 @@
 /* jshint forin: false */
 /* global kf */
 
+//TODO 重构generateExpression函数
+/* 由于有一个大函数，临时把单个函数内的最大语句行数调整一下， 留待以后重构 */
+/* jshint maxstatements: 500 */
+
 define( function () {
 
     var CONSTRUCT_MAPPING = {},

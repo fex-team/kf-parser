@@ -1,7 +1,7 @@
 {
-    "name": "kityformula-editor",
-    "title": "kityformula-editor",
-    "description": "SVG-based visualization Equation Editor",
+    "name": "KityFormulaParser",
+    "title": "Kity Formula Parser",
+    "description": "Mathematical formulas parse to KityFormula Render",
     "version": "1.0.0",
     "homepage": "https://github.com/HanCong03/kityformula-editor",
     "author": {

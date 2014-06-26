@@ -7,7 +7,7 @@ define( function ( require ) {
     var mergeHandler = require( "impl/latex/handler/combination" ),
         Utils = require( "impl/latex/base/utils" );
 
-    function tree ( units ) {
+    function generateTree ( units ) {
 
         var currentUnit = null,
             tree = [];
@@ -15,7 +15,7 @@ define( function ( require ) {
         for ( var i = 0 , len = units.length; i < len; i++ ) {
 
             if ( Utils.isArray( units[ i ] ) ) {
-                units[ i ] = tree( units[ i ] );
+                units[ i ] = generateTree( units[ i ] );
             }
 
         }
@@ -39,6 +39,6 @@ define( function ( require ) {
 
     }
 
-    return tree;
+    return generateTree;
 
 } );

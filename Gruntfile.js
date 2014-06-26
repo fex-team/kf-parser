@@ -29,9 +29,8 @@ module.exports = function (grunt) {
 
                 },
 
-                files: {
-                    'dist/kity-formula.all.js': [ '.tmp_build/kf.tmp.js', 'dev-lib/exports.js' ]
-                }
+                dest: 'dist/' + getFileName(),
+                src: [ '.tmp_build/kf.tmp.js', 'dev-lib/exports.js' ]
 
             }
 
@@ -61,9 +60,8 @@ module.exports = function (grunt) {
 
             minimize: {
 
-                files: {
-                    'dist/kity-formula.all.min.js': 'dist/kity-formula.all.js'
-                }
+                dest: 'dist/' + getFileName( true ),
+                src: 'dist/' + getFileName()
 
             }
 
@@ -102,6 +100,22 @@ module.exports = function (grunt) {
         }
 
     });
+
+    function getFileName ( isMin ) {
+
+        var pkg = grunt.file.readJSON('package.json')
+
+        return pkg.name.replace( /[A-Z]/g, function ( match, index ) {
+
+            if ( index === 0 ) {
+                return match.toLowerCase();
+            } else {
+                return '-' + match.toLowerCase();
+            }
+
+        } ) + ( isMin ? '.all.min.js' : '.all.js' );
+
+    }
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-concat');
