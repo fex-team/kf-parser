@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            width: 1000px;e
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        #editor {
+            width: 100%;
+            height: 200px;
+        }
+
+        .split {
+            padding: 50px 0;
+        }
+
+        #editor textarea {
+            width: 100%;
+            height: 100%;
+            resize: none;
+        }
+    </style>
+    <script src="dev-lib/jquery-1.10.2.min.js"></script>
+    <script src="dev-lib/kitygraph.all.js"></script>
+    <script src="dev-lib/kity-formula.all.js"></script>
+
+    <!--<script src="dist/kityformula-parser.all.js"></script>-->
+    <!--<script src="dev-lib/dev-define.js"></script>-->
+    <!--<script>-->
+        <!--inc.config({-->
+            <!--base: './src'-->
+        <!--});-->
+    <!--</script>-->
+    <!--<script src="dev-lib/exports.js"></script>-->
+    <!--<script src="dev-lib/dev-start.js"></script>-->
+    <script src="dist/kity-formula-parser.all.js"></script>
+    <script>
+
+        window.onload = function () {
+
+            var Parser = kf.Parser,
+                Assembly = kf.Assembly,
+                latexParser = Parser.use( "latex" );
+
+            kf.ResourceManager.ready( function ( Formula ) {
+
+                var formula = new Formula( document.getElementById( "container" ), {
+                        fontsize: 50
+                    }),
+                    assembly = new Assembly( formula );
+
+                document.getElementById( "parseBtn" ).onclick = function () {
+                    parse();
+                };
+
+                document.onkeydown = function ( e ) {
+                    if ( e.ctrlKey && e.keyCode === 83 ) {
+                        e.preventDefault();
+                        parse();
+                    }
+                };
+
+                function parse () {
+
+                    var value = document.getElementById( "latexInput" ).value,
+                            parseResult = latexParser.parse( value );
+
+                    assembly.regenerateBy( parseResult );
+
+                }
+
+            }, {
+                path: "./resource/"
+            } );
+
+        };
+
+    </script>
+</head>
+<body>
+    <div class="main">
+        <div id="editor">
+            <!--<textarea id="latexInput">\int^{n}_{n=20}{n*3}</textarea>-->
+            <!--<textarea id="latexInput">\lim_{x\to\infty}{a-b}</textarea>-->
+            <!--<textarea id="latexInput">a+{b-c}</textarea>-->
+            <!--<textarea id="latexInput">\int{\sum ab} a</textarea>-->
+            <!--<textarea id="latexInput">a^2+b^2=c^2</textarea>-->
+            <!--<textarea id="latexInput">a+b+c-d</textarea>-->
+            <!--<textarea id="latexInput">a+b+{c+d}^2+acd</textarea>-->
+            <!--<textarea id="latexInput">\sqrt[n]{ab}=\sqrt[n]{a}\cdot\sqrt[n]{b}</textarea>-->
+            <!--<textarea id="latexInput">\left [ (a+b-c) \right ]</textarea>-->
+            <!--<textarea id="latexInput">e=\lim _{n\to \infty }\left(1+\frac{1233}{n}\right)</textarea>-->
+            <textarea id="latexInput">\mathcal{A}</textarea>
+        </div>
+        <div class="split">
+            <button id="parseBtn" type="button">转换</button>
+        </div>
+        <div id="container"></div>
+    </div>
+</body>
+</html>

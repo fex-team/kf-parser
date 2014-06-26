@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            width: 1000px;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        #container {
+            padding: 50px;
+        }
+
+        #container div {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+        }
+
+    </style>
+    <script src="dev-lib/kitygraph.all.js"></script>
+    <script src="dev-lib/kity-formula.all.js"></script>
+
+    <script src="dev-lib/dev-define.js"></script>
+    <script>
+        inc.config({
+            base: './src'
+        });
+    </script>
+    <script src="dev-lib/exports.js"></script>
+    <script src="dev-lib/dev-start.js"></script>
+    <script>
+
+        window.onload = function () {
+
+            var Parser = kf.Parser,
+                Assembly = kf.Assembly,
+                container = document.getElementById( "container" ),
+                assembly = null;
+
+            var latexParser = Parser.use( "latex" ),
+                list = [
+                    "gets", "to", "uparrow", "downarrow", "leftrightarrow", "updownarrow",
+                    "Leftarrow", "Rightarrow", "Uparrow", "Downarrow", "Leftrightarrow",
+                    "Updownarrow", "longleftarrow", "longrightarrow", "longleftrightarrow",
+                    "Longleftarrow", "Longrightarrow", "Longleftrightarrow", "nearrow",
+                    "nwarrow", "searrow", "swarrow", "nleftarrow", "nrightarrow",
+                    "nLeftarrow", "nRightarrow", "nLeftrightarrow", "leftharpoonup",
+                    "leftharpoondown", "rightharpoonup",
+                    "rightharpoondown", "upharpoonleft", "upharpoonright", "downharpoonleft",
+                    "downharpoonright", "leftrightharpoons", "rightleftharpoons", "leftleftarrows",
+                    "rightrightarrows", "upuparrows", "downdownarrows", "leftrightarrows",
+                    "rightleftarrows", "looparrowleft", "looparrowright", "leftarrowtail",
+                    "rightarrowtail", "Lsh", "Rsh", "Lleftarrow", "Rrightarrow", "curvearrowleft",
+                    "curvearrowright", "circlearrowleft", "circlearrowright", "multimap",
+                    "leftrightsquigarrow", "twoheadleftarrow", "twoheadrightarrow", "rightsquigarrow"
+                ];
+
+            kity.Utils.each( list, function ( str ) {
+                createFormula( "\\" + str );
+            } );
+
+            function parse ( ass, str ) {
+
+                var parseResult = latexParser.parse( str );
+
+                ass.regenerateBy( parseResult );
+
+            }
+
+            function createFormula ( str ) {
+
+                var node = document.createElement( "div" );
+
+                container.appendChild( node );
+
+                assembly = Assembly.use( node, {
+                    fontsize: 20
+                } );
+
+                parse( assembly, str );
+
+            }
+
+        };
+
+    </script>
+</head>
+<body>
+    <div class="main">
+        <div id="container"></div>
+    </div>
+</body>
+</html>
